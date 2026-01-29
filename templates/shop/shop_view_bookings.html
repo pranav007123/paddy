@@ -1,0 +1,76 @@
+{% extends 'shop/shop_base.html' %}
+
+{% block title %}Shop Orders - Plant Health System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="text-success"><i class="fas fa-shopping-cart me-2"></i>Orders</h2>
+            <hr class="mb-4">
+            
+            {% if bookings %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>User</th>
+                            <th>Date</th>
+                            <th>Items</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in bookings %}
+                        <tr>
+                            <td>#{{ booking.id }}</td>
+                            <td>{{ booking.user.username }}</td>
+                            <td>{{ booking.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                {% for item in booking.items.all %}
+                                    {{ item.plant.name }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>₹{{ booking.total_amount }}</td>
+                            <td>
+                                {% if booking.order_status == 'pending' %}
+                                    <span class="badge bg-warning">Pending</span>
+                                {% elif booking.order_status == 'confirmed' %}
+                                    <span class="badge bg-success">Confirmed</span>
+                                {% elif booking.order_status == 'shipped' %}
+                                    <span class="badge bg-primary">Shipped</span>
+                                {% elif booking.order_status == 'delivered' %}
+                                    <span class="badge bg-info">Delivered</span>
+                                {% elif booking.order_status == 'cancelled' %}
+                                    <span class="badge bg-danger">Cancelled</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ booking.order_status|title }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if booking.order_status == 'pending' %}
+                                    <a href="{% url 'update_order_status' booking.id 'confirmed' %}" class="btn btn-sm btn-success">Confirm</a>
+                                    <a href="{% url 'update_order_status' booking.id 'cancelled' %}" class="btn btn-sm btn-danger">Cancel</a>
+                                {% elif booking.order_status == 'confirmed' %}
+                                    <a href="{% url 'update_order_status' booking.id 'shipped' %}" class="btn btn-sm btn-primary">Ship</a>
+                                {% elif booking.order_status == 'shipped' %}
+                                    <a href="{% url 'update_order_status' booking.id 'delivered' %}" class="btn btn-sm btn-info">Deliver</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle me-2"></i>No orders available.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

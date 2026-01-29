@@ -1,0 +1,79 @@
+{% extends 'shop/shop_base.html' %}
+
+{% block title %}Edit Category - Plant Health System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 bg-light sidebar">
+            <div class="p-3">
+                <h4><i class="fas fa-crown me-2"></i>Admin Panel</h4>
+                <hr>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_dashboard' %}"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_shops' %}"><i class="fas fa-store me-2"></i>Manage Shops</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'category_management' %}"><i class="fas fa-tags me-2"></i>Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_users' %}"><i class="fas fa-users me-2"></i>Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_complaints' %}"><i class="fas fa-comments me-2"></i>Complaints</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_reviews_admin' %}"><i class="fas fa-star me-2"></i>Reviews</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'change_password_admin' %}"><i class="fas fa-key me-2"></i>Change Password</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <h2><i class="fas fa-edit me-2"></i>Edit Category</h2>
+            <hr>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-success text-white text-center">
+                            <h4><i class="fas fa-tag me-2"></i>Edit Category</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Category Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="{{ category.name }}" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3">{{ category.description }}</textarea>
+                                </div>
+                                
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <a href="{% url 'category_management' %}" class="btn btn-secondary">Cancel</a>
+                                    <button type="submit" class="btn btn-success">Update Category</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

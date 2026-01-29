@@ -1,0 +1,144 @@
+{% extends 'shop/shop_base.html' %}
+
+{% block title %}Shopping Cart - Plant Health System{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4"><i class="fas fa-shopping-cart me-2"></i>Shopping Cart</h2>
+
+    {% if cart_items %}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="table-light text-center">
+                            <tr>
+                                <th>Plant</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart_items %}
+                            <tr id="row-{{ item.id }}">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        {% if item.plant.image %}
+                                        <img src="{{ item.plant.image.url }}" alt="{{ item.plant.name }}" width="50"
+                                            height="50" class="rounded me-2" style="object-fit: cover;">
+                                        {% else %}
+                                        <img src="https://via.placeholder.com/50" alt="{{ item.plant.name }}" width="50"
+                                            height="50" class="rounded me-2">
+                                        {% endif %}
+                                        <span>{{ item.plant.name }}</span>
+                                    </div>
+                                </td>
+                                <td class="text-center">₹{{ item.plant.price }}</td>
+                                <td class="text-center">
+                                    <div class="input-group input-group-sm mx-auto" style="width: 100px;">
+                                        <button class="btn btn-outline-secondary"
+                                            onclick="changeQuantity({{ item.id }}, -1)">-</button>
+                                        <input type="number" id="qty-{{ item.id }}" value="{{ item.quantity }}" min="1"
+                                            max="{{ item.plant.stock }}" class="form-control text-center"
+                                            onchange="updateCart({{ item.id }})">
+                                        <button class="btn btn-outline-secondary"
+                                            onclick="changeQuantity({{ item.id }}, 1)">+</button>
+                                    </div>
+                                </td>
+                                <td class="text-center fw-bold">₹<span id="item-total-{{ item.id }}">{{
+                                        item.item_total|floatformat:2 }}</span></td>
+                                <td class="text-center">
+                                    <a href="{% url 'remove_from_cart' item.id %}" class="text-danger"><i
+                                            class="fas fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm border-0 sticky-top" style="top: 100px;">
+                <h5 class="mb-3">Order Summary</h5>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Total Items:</span>
+                    <span class="fw-bold">{{ cart_items|length }}</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal:</span>
+                    <span class="fw-bold">₹<span id="subtotal">{{ subtotal|floatformat:2 }}</span></span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Tax (5%):</span>
+                    <span class="fw-bold">₹<span id="tax">{{ tax|floatformat:2 }}</span></span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Delivery:</span>
+                    <span class="fw-bold">₹<span id="delivery">{{ delivery_charge|floatformat:2 }}</span></span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="h5">Total:</span>
+                    <span class="h5 text-success">₹<span id="grad-total">{{ total_price|floatformat:2 }}</span></span>
+                </div>
+                <a href="{% url 'checkout' %}" class="btn btn-success w-100 py-2 fw-bold">Proceed to Checkout</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="fas fa-shopping-basket fa-4x text-muted mb-3"></i>
+        <h3>Your cart is empty</h3>
+        <p class="text-muted mb-4">Looks like you haven't added any plants yet.</p>
+        <a href="{% url 'view_categories_plants' %}" class="btn btn-success px-5">Browse Plants</a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    function changeQuantity(itemId, delta) {
+        const input = document.getElementById(`qty-${itemId}`);
+        let newVal = parseInt(input.value) + delta;
+        if (newVal >= 1 && newVal <= parseInt(input.getAttribute('max'))) {
+            input.value = newVal;
+            updateCart(itemId);
+        }
+    }
+
+    function updateCart(itemId) {
+        const input = document.getElementById(`qty-${itemId}`);
+        const quantity = input.value;
+        const url = `/shop/cart/update/${itemId}/`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: `quantity=${quantity}`
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    if (document.getElementById(`item-total-${itemId}`)) {
+                        document.getElementById(`item-total-${itemId}`).innerText = parseFloat(data.item_total).toFixed(2);
+                    }
+                    document.getElementById('subtotal').innerText = parseFloat(data.subtotal).toFixed(2);
+                    document.getElementById('tax').innerText = parseFloat(data.tax).toFixed(2);
+                    document.getElementById('delivery').innerText = parseFloat(data.delivery_charge).toFixed(2);
+                    document.getElementById('grad-total').innerText = parseFloat(data.total_price).toFixed(2);
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+{% endblock %}

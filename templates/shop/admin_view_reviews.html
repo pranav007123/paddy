@@ -1,0 +1,103 @@
+{% extends 'shop/shop_base.html' %}
+
+{% block title %}Manage Reviews - Plant Health System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 bg-light sidebar">
+            <div class="p-3">
+                <h4><i class="fas fa-crown me-2"></i>Admin Panel</h4>
+                <hr>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_dashboard' %}"><i
+                                class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_shops' %}"><i class="fas fa-store me-2"></i>Manage
+                            Shops</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'category_management' %}"><i
+                                class="fas fa-tags me-2"></i>Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_users' %}"><i class="fas fa-users me-2"></i>Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'view_reviews_admin' %}"><i
+                                class="fas fa-star me-2"></i>Reviews</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'change_password_admin' %}"><i
+                                class="fas fa-key me-2"></i>Change Password</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <h2><i class="fas fa-star me-2"></i>Product Reviews</h2>
+            <hr>
+
+            {% if reviews %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Purchased By</th>
+                            <th>Shop</th>
+                            <th>Rating</th>
+                            <th>Review</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for review in reviews %}
+                        <tr>
+                            <td>
+                                <strong>{{ review.plant.name }}</strong><br>
+                                <small class="text-muted">{{ review.plant.category.name }}</small>
+                            </td>
+                            <td>
+                                {{ review.user.name }}<br>
+                                <small class="text-muted">{{ review.user.email }}</small>
+                            </td>
+                            <td>
+                                {{ review.shop.shop_name }}<br>
+                                <small class="text-muted">{{ review.shop.email }}</small>
+                            </td>
+                            <td>
+                                {% for i in "12345" %}
+                                {% if forloop.counter <= review.rating %} <i class="fas fa-star text-warning"></i>
+                                    {% else %}
+                                    <i class="far fa-star text-muted"></i>
+                                    {% endif %}
+                                    {% endfor %}
+                                    <br><small>({{ review.rating }}/5)</small>
+                            </td>
+                            <td>
+                                <p class="mb-0">{{ review.comment|default:"No comment" }}</p>
+                            </td>
+                            <td>{{ review.created_at|date:"M d, Y" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle me-2"></i>No reviews found.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

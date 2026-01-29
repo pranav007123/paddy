@@ -1,0 +1,143 @@
+{% extends 'shop/shop_base.html' %}
+
+{% block title %}Checkout - Plant Health System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2><i class="fas fa-shopping-bag me-2"></i>Checkout</h2>
+    <hr>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Delivery Address</h5>
+                </div>
+                <div class="card-body">
+                    <form id="checkoutForm">
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Shipping Address</label>
+                            <textarea class="form-control" id="address" name="address"
+                                placeholder="Enter your full delivery address" rows="3"
+                                required>{{ user.userprofile.address }}</textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Payment Method</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Secure payment via <strong>Razorpay</strong>. Supports UDP, Credit/Debit Cards, and Netbanking.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    {% for item in cart_items %}
+                    <div class="d-flex justify-content-between mb-2 small">
+                        <span>{{ item.plant.name }} (x{{ item.quantity }})</span>
+                        <span>₹{{ item.item_total|floatformat:2 }}</span>
+                    </div>
+                    {% endfor %}
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <span>Subtotal:</span>
+                        <span>₹{{ subtotal|floatformat:2 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>Tax (5%):</span>
+                        <span>₹{{ tax|floatformat:2 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>Delivery:</span>
+                        <span>₹{{ delivery_charge|floatformat:2 }}</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3 fw-bold fs-5">
+                        <strong>Total:</strong>
+                        <strong class="text-success">₹{{ total_price|floatformat:2 }}</strong>
+                    </div>
+
+                    <!-- Razorpay Button -->
+                    <button id="rzp-button1" class="btn btn-success w-100 btn-lg">
+                        <i class="fas fa-lock me-2"></i>Pay Now
+                    </button>
+
+                    <div id="payment-message" class="mt-2 text-center text-danger" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden Form for Verification -->
+<form action="{% url 'verify_payment' %}" method="POST" id="verifyForm">
+    {% csrf_token %}
+    <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+    <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">
+    <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+    <input type="hidden" name="address" id="hidden_address">
+</form>
+
+<!-- Razorpay Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var options = {
+        "key": "{{ razorpay_key_id }}",
+        "amount": "{{ payment.amount }}",
+        "currency": "INR",
+        "name": "Paddy Doctor Shop",
+        "description": "Plant Order Payment",
+        "image": "/static/images/logo.png",
+        "order_id": "{{ payment.id }}",
+        "handler": function (response) {
+            // On Success, populate hidden form and submit
+            document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+            document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+            document.getElementById('razorpay_signature').value = response.razorpay_signature;
+
+            // Get address from the main form
+            var address = document.getElementById('address').value;
+            document.getElementById('hidden_address').value = address;
+
+            // Submit
+            document.getElementById('verifyForm').submit();
+        },
+        "prefill": {
+            "name": "{{ user.first_name }} {{ user.last_name }}",
+            "email": "{{ user.email }}",
+            "contact": "{{ user.userprofile.contact_number }}"
+        },
+        "theme": {
+            "color": "#28a745"
+        }
+    };
+
+    var rzp1 = new Razorpay(options);
+
+    document.getElementById('rzp-button1').onclick = function (e) {
+        var address = document.getElementById('address').value;
+        if (!address.trim()) {
+            alert("Please enter a shipping address.");
+            return;
+        }
+        rzp1.open();
+        e.preventDefault();
+    }
+
+    rzp1.on('payment.failed', function (response) {
+        alert("Payment Failed: " + response.error.description);
+    });
+</script>
+{% endblock %}

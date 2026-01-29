@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Premium Hero Section -->
+<section class="premium-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <div class="hero-glass-card animate__animated animate__fadeInLeft">
+                    <span class="section-tag" style="color: #a7f3d0;">AI-Powered Agriculture</span>
+                    <h1 class="hero-title">Protect Your Crops with Intelligent Testing</h1>
+                    <p class="lead mb-4" style="color: rgba(255,255,255,0.85);">Precision diagnostics for Paddy and
+                        Mango.
+                        Upload a leaf photo and let our AI provide instant health reports and organic remedies.</p>
+
+                    <div class="d-flex flex-wrap gap-3">
+                        {% if request.session.uid %}
+                        <a href="{% url 'paddy_upload' %}" class="btn btn-premium btn-premium-primary">
+                            <i class="fas fa-microscope"></i> Paddy Analysis
+                        </a>
+                        <a href="{% url 'mango_upload' %}" class="btn btn-premium btn-premium-outline ms-lg-3">
+                            <i class="fas fa-leaf"></i> Mango Analysis
+                        </a>
+                        {% else %}
+                        <a href="/login" class="btn btn-premium btn-premium-primary">
+                            <i class="fas fa-sign-in-alt"></i> Login to Analyze
+                        </a>
+                        <a href="/register" class="btn btn-premium btn-premium-outline ms-lg-3">
+                            <i class="fas fa-user-plus"></i> Join as Farmer
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block">
+                <!-- Visual placeholder or secondary CTA -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Diagnostic Categories Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row mb-5 text-center">
+            <div class="col-12">
+                <span class="section-tag">Diagnostic Categories</span>
+                <h2 class="section-title">Supported Crops</h2>
+                <p class="text-muted">Our AI system is specialized in detecting diseases for the following major crop
+                    categories.</p>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <!-- Paddy Category -->
+            <div class="col-md-5 mb-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mx-auto"><i class="fas fa-seedling"></i></div>
+                    <h3>Paddy (धान)</h3>
+                    <p class="text-muted px-4">Detect Blast, Bacterial Blight, Brown Spot, and Leaf Smut in Paddy crops
+                        instantly.</p>
+                    <div class="mt-4">
+                        {% if request.session.uid %}
+                        <a href="{% url 'paddy_upload' %}" class="btn btn-premium btn-premium-primary">Start Paddy
+                            Analysis</a>
+                        {% else %}
+                        <a href="/login" class="btn btn-premium btn-premium-outline"
+                            style="color: var(--primary) !important; border-color: var(--primary);">Login to Analyze</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <!-- Mango Category -->
+            <div class="col-md-5 mb-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mx-auto"><i class="fas fa-leaf"></i></div>
+                    <h3>Mango (आम)</h3>
+                    <p class="text-muted px-4">Detect Anthracnose, Powdery Mildew, and Algal Leaf Spot in Mango crops
+                        with ease.</p>
+                    <div class="mt-4">
+                        {% if request.session.uid %}
+                        <a href="{% url 'mango_upload' %}" class="btn btn-premium btn-premium-primary">Start Mango
+                            Analysis</a>
+                        {% else %}
+                        <a href="/login" class="btn btn-premium btn-premium-outline"
+                            style="color: var(--primary) !important; border-color: var(--primary);">Login to Analyze</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Feature Grid -->
+<section class="container feature-grid">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                <h4>Instant Results</h4>
+                <p class="text-muted">Our AI models process images in seconds, providing immediate feedback on crop
+                    health status.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-vial"></i></div>
+                <h4>Organic Remedies</h4>
+                <p class="text-muted">Receive scientifically backed organic solutions tailored specifically to the
+                    detected disease.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                <h4>98% Accuracy</h4>
+                <p class="text-muted">Trained on thousands of real-world samples to ensure high reliability for field
+                    operations.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Detailed Info Section -->
+<section class="py-5 mt-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 mb-4">
+                <img src="{% static 'images/plant.jpeg' %}" class="img-fluid rounded-3 shadow-lg" alt="AI Research"
+                    style="border-radius: 30px !important;">
+            </div>
+            <div class="col-md-6 ps-lg-5">
+                <span class="section-tag">Our Mission</span>
+                <h2 class="section-title">Sustainable Farming Through Technology</h2>
+                <p class="text-muted mb-4">We empower farmers with accessible digital tools to combat crop diseases,
+                    reduce pesticide use, and maximize yield quality.</p>
+                <ul class="list-unstyled">
+                    <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle text-success me-3"></i>
+                        Real-time cloud-based analysis</li>
+                    <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle text-success me-3"></i>
+                        Expert-curated treatment database</li>
+                    <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle text-success me-3"></i>
+                        Support for multiple crop variants</li>
+                </ul>
+                <a href="/shop/catalog/" class="btn btn-premium btn-premium-primary mt-3"
+                    style="color: white !important;">Browse Plant Shop</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="stat-item">
+                    <h3>15k+</h3>
+                    <p>Farmers Supported</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="stat-item">
+                    <h3>98%</h3>
+                    <p>AI Accuracy</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="stat-item">
+                    <h3>50+</h3>
+                    <p>Diseases Detectable</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="stat-item">
+                    <h3>24/7</h3>
+                    <p>System Availability</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

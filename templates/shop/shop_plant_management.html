@@ -1,0 +1,139 @@
+{% extends 'shop/shop_base.html' %}
+
+{% block title %}Plant Management - Plant Health System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="text-success"><i class="fas fa-leaf me-2"></i>Plant Management</h2>
+            <hr class="mb-4">
+
+            <!-- Add Plant Form -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-plus me-2"></i>Add New Plant</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.name.id_for_label }}" class="form-label fw-semibold">Plant
+                                        Name</label>
+                                    {{ form.name }}
+                                    {% if form.name.errors %}<div class="text-danger mt-1">{{ form.name.errors }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="{{ form.category.id_for_label }}"
+                                        class="form-label fw-semibold">Category</label>
+                                    {{ form.category }}
+                                    {% if form.category.errors %}<div class="text-danger mt-1">{{ form.category.errors
+                                        }}</div>{% endif %}
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="{{ form.price.id_for_label }}"
+                                        class="form-label fw-semibold">Price</label>
+                                    {{ form.price }}
+                                    {% if form.price.errors %}<div class="text-danger mt-1">{{ form.price.errors }}
+                                    </div>{% endif %}
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="{{ form.stock.id_for_label }}"
+                                        class="form-label fw-semibold">Stock</label>
+                                    {{ form.stock }}
+                                    {% if form.stock.errors %}<div class="text-danger mt-1">{{ form.stock.errors }}
+                                    </div>{% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.description.id_for_label }}"
+                                        class="form-label fw-semibold">Description</label>
+                                    {{ form.description }}
+                                    {% if form.description.errors %}<div class="text-danger mt-1">{{
+                                        form.description.errors }}</div>{% endif %}
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="{{ form.image.id_for_label }}"
+                                        class="form-label fw-semibold">Image</label>
+                                    {{ form.image }}
+                                    {% if form.image.errors %}<div class="text-danger mt-1">{{ form.image.errors }}
+                                    </div>{% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-save me-2"></i>Add Plant
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Existing Plants -->
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-seedling me-2"></i>Existing Plants</h5>
+                </div>
+                <div class="card-body">
+                    {% if plants %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for plant in plants %}
+                                <tr>
+                                    <td>
+                                        {% if plant.image %}
+                                        <img src="{{ plant.image.url }}" alt="{{ plant.name }}" width="50" height="50"
+                                            class="rounded">
+                                        {% else %}
+                                        <i class="fas fa-seedling text-success"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ plant.name }}</td>
+                                    <td>{{ plant.category.name }}</td>
+                                    <td>₹{{ plant.price }}</td>
+                                    <td>{{ plant.stock }}</td>
+                                    <td>
+                                        <a href="{% url 'edit_plant' plant.id %}"
+                                            class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <a href="{% url 'delete_plant' plant.id %}"
+                                            class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Are you sure you want to delete {{ plant.name }}?');">Delete</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-info-circle me-2"></i>No plants added yet.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

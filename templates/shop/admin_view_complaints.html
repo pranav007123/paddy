@@ -1,0 +1,77 @@
+{% extends 'shop/shop_base.html' %}
+
+{% block title %}Manage Complaints - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <!-- Sidebar -->
+        {% include 'shop/includes/admin_sidebar.html' %}
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <h2><i class="fas fa-comments me-2"></i>Manage Complaints</h2>
+            <hr>
+
+            <!-- All Complaints -->
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-list me-2"></i>All Complaints</h5>
+                </div>
+                <div class="card-body">
+                    {% if complaints %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>User</th>
+                                    <th>Shop</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for complaint in complaints %}
+                                <tr>
+                                    <td>{{ complaint.subject }}</td>
+                                    <td>{{ complaint.user.username }}</td>
+                                    <td>
+                                        {% if complaint.shop %}
+                                        {{ complaint.shop.shop_name }}
+                                        {% else %}
+                                        <span class="text-muted">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge 
+                                                {% if complaint.is_resolved %}bg-success
+                                                {% else %}bg-warning{% endif %}">
+                                            {% if complaint.is_resolved %}Resolved{% else %}Pending{% endif %}
+                                        </span>
+                                    </td>
+                                    <td>{{ complaint.created_at|date:"M d, Y" }}</td>
+                                    <td>
+                                        {% if not complaint.is_resolved %}
+                                        <a href="{% url 'reply_complaint' complaint.id %}"
+                                            class="btn btn-sm btn-outline-primary">Reply</a>
+                                        {% else %}
+                                        <span class="text-muted">Replied</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No complaints found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

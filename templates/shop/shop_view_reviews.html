@@ -1,0 +1,60 @@
+{% extends 'shop/shop_base.html' %}
+
+{% block title %}Shop Reviews - Plant Health System{% endblock %}
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="text-success"><i class="fas fa-star me-2"></i>Customer Reviews for Your Products</h2>
+            <hr class="mb-4">
+
+            {% if reviews %}
+            <div class="row">
+                {% for review in reviews %}
+                <div class="col-md-12 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6 class="text-muted">Product</h6>
+                                    <p class="mb-0"><strong>{{ review.plant.name }}</strong></p>
+                                    <small class="text-muted">{{ review.plant.category.name }}</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <h6 class="text-muted">Customer</h6>
+                                    <p class="mb-0">{{ review.user.name }}</p>
+                                    <small class="text-muted">{{ review.user.email }}</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <h6 class="text-muted">Rating</h6>
+                                    <div>
+                                        {% for i in "12345" %}
+                                        {% if forloop.counter <= review.rating %} <i class="fas fa-star text-warning">
+                                            </i>
+                                            {% else %}
+                                            <i class="far fa-star text-muted"></i>
+                                            {% endif %}
+                                            {% endfor %}
+                                    </div>
+                                    <small class="text-muted">({{ review.rating }}/5)</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="text-muted">Review</h6>
+                                    <p class="mb-0">{{ review.comment }}</p>
+                                    <small class="text-muted">{{ review.created_at|date:"M d, Y" }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle me-2"></i>No reviews available for your products yet.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends 'shop/shop_base.html' %}
+
+{% block title %}Previous Orders - Plant Health System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2><i class="fas fa-history me-2"></i>Previous Orders</h2>
+    <hr>
+
+    {% if orders %}
+    {% for order in orders %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Order #{{ order.id }}</h5>
+                    <p class="text-muted mb-0">Placed on {{ order.created_at|date:"M d, Y" }}</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <span class="badge 
+                            {% if order.order_status == 'pending' %}bg-warning
+                            {% elif order.order_status == 'confirmed' %}bg-info
+                            {% elif order.order_status == 'shipped' %}bg-primary
+                            {% elif order.order_status == 'delivered' %}bg-success
+                            {% else %}bg-danger{% endif %}">
+                        {{ order.order_status|title }}
+                    </span>
+                    <p class="mb-0 mt-1">Total: ₹{{ order.total_amount }}</p>
+                    <a href="{% url 'order_receipt' order.id %}" class="btn btn-sm btn-outline-success mt-2"
+                        target="_blank">
+                        <i class="fas fa-download"></i> Download Receipt
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <h6>Order Items:</h6>
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Plant</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order.items.all %}
+                        <tr>
+                            <td>{{ item.plant.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>₹{{ item.price }}</td>
+                            <td>₹{{ item.total_price|floatformat:2 }}</td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-outline-warning" data-bs-toggle="modal"
+                                    data-bs-target="#rateModal{{ item.plant.id }}-{{ order.id }}">
+                                    <i class="fas fa-star"></i> Rate
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <p class="mb-0"><strong>Shipping Address:</strong></p>
+            <p class="text-muted">{{ order.shipping_address }}</p>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- All Rating Modals (Outside Tables) -->
+    {% for order in orders %}
+    {% for item in order.items.all %}
+    <div class="modal fade" id="rateModal{{ item.plant.id }}-{{ order.id }}" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rate {{ item.plant.name }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="{% url 'add_review' item.plant.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3 text-center">
+                            <label class="form-label">Rating</label>
+                            <div class="rating-stars">
+                                <input type="radio" name="rating" value="5" id="s5-{{ item.plant.id }}-{{ order.id }}"
+                                    required><label for="s5-{{ item.plant.id }}-{{ order.id }}">★</label>
+                                <input type="radio" name="rating" value="4"
+                                    id="s4-{{ item.plant.id }}-{{ order.id }}"><label
+                                    for="s4-{{ item.plant.id }}-{{ order.id }}">★</label>
+                                <input type="radio" name="rating" value="3"
+                                    id="s3-{{ item.plant.id }}-{{ order.id }}"><label
+                                    for="s3-{{ item.plant.id }}-{{ order.id }}">★</label>
+                                <input type="radio" name="rating" value="2"
+                                    id="s2-{{ item.plant.id }}-{{ order.id }}"><label
+                                    for="s2-{{ item.plant.id }}-{{ order.id }}">★</label>
+                                <input type="radio" name="rating" value="1"
+                                    id="s1-{{ item.plant.id }}-{{ order.id }}"><label
+                                    for="s1-{{ item.plant.id }}-{{ order.id }}">★</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Review</label>
+                            <textarea name="comment" class="form-control" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endfor %}
+
+    {% else %}
+    <div class="text-center">
+        <i class="fas fa-history fa-5x text-muted mb-3"></i>
+        <h4>No previous orders</h4>
+        <p class="text-muted">You haven't placed any orders yet.</p>
+        <a href="{% url 'view_categories_plants' %}" class="btn btn-success">Start Shopping</a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .rating-stars {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+    }
+
+    .rating-stars input {
+        display: none;
+    }
+
+    .rating-stars label {
+        font-size: 2rem;
+        color: #ddd;
+        cursor: pointer;
+    }
+
+    .rating-stars input:checked~label {
+        color: #ffc107;
+    }
+
+    .rating-stars label:hover,
+    .rating-stars label:hover~label {
+        color: #ffc107;
+    }
+</style>
+{% endblock %}

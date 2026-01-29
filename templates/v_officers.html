@@ -1,0 +1,41 @@
+{% block content %}
+{% load static %}
+{% include 'header.html' %}
+
+<div class="contact-box-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-sm-12">
+                <div class="contact-form-right">
+                    <h2> View Registered Officers </h2>
+                    <div class="row">
+                    <table class="table table-bordered">
+                         <tr>
+                            <th>ID</th>
+                            <th>OFFICER NAME</th>
+                            <th>PHONE NUMBER</th>
+                            <th>PLACE</th>
+                            <th>BOOKING</th>
+                            
+                            
+                         </tr>
+                        {% for i in result %}
+                           <tr>
+                              <td>{{forloop.counter}}</td>
+                              <td>{{i.officer_name}}</td>
+                              <td>{{i.phone_number}}</td>
+                              <td>{{i.place}}</td>
+                              <td><a href="booking/{{i.id}}">booking</a></td>
+                            </tr>
+                           
+                        {% endfor %}
+                    </table>
+                    </div>
+                    
+                </div>
+            </div>              
+    </div>
+</div>
+<!-- End Cart -->
+{% include 'footer.html' %}
+{% endblock %}

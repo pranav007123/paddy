@@ -1,0 +1,52 @@
+<div class="col-md-3 bg-light sidebar">
+    <div class="p-3">
+        <h4><i class="fas fa-crown me-2"></i>Admin Panel</h4>
+        <hr>
+        <div class="d-grid gap-2">
+            <small class="text-uppercase text-muted fw-bold">Overview</small>
+            <a class="btn btn-sm text-start {% if request.resolver_match.url_name == 'admin_dashboard' %}btn-primary{% else %}btn-outline-light text-dark{% endif %}"
+                href="{% url 'admin_dashboard' %}">
+                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            </a>
+
+            <small class="text-uppercase text-muted fw-bold mt-2">Management</small>
+            <a class="btn btn-sm text-start {% if request.resolver_match.url_name == 'view_shops' %}btn-primary{% else %}btn-outline-light text-dark{% endif %}"
+                href="{% url 'view_shops' %}">
+                <i class="fas fa-store me-2"></i>Manage Shops
+            </a>
+            <a class="btn btn-sm text-start {% if request.resolver_match.url_name == 'view_users' %}btn-primary{% else %}btn-outline-light text-dark{% endif %}"
+                href="{% url 'view_users' %}">
+                <i class="fas fa-users me-2"></i>Manage Users
+            </a>
+            <a class="btn btn-sm text-start {% if request.resolver_match.url_name == 'category_management' %}btn-primary{% else %}btn-outline-light text-dark{% endif %}"
+                href="{% url 'category_management' %}">
+                <i class="fas fa-tags me-2"></i>Categories
+            </a>
+
+            <small class="text-uppercase text-muted fw-bold mt-2">Business</small>
+            <a class="btn btn-sm text-start {% if request.resolver_match.url_name == 'admin_view_all_orders' %}btn-primary{% else %}btn-outline-light text-dark{% endif %}"
+                href="{% url 'admin_view_all_orders' %}">
+                <i class="fas fa-shopping-bag me-2"></i>All Orders
+            </a>
+            <a class="btn btn-sm text-start {% if request.resolver_match.url_name == 'view_reviews_admin' %}btn-primary{% else %}btn-outline-light text-dark{% endif %}"
+                href="{% url 'view_reviews_admin' %}">
+                <i class="fas fa-star me-2"></i>Reviews
+            </a>
+
+            <small class="text-uppercase text-muted fw-bold mt-2">System Data</small>
+            <a class="btn btn-sm text-start {% if request.resolver_match.url_name == 'admin_predictions' %}btn-primary{% else %}btn-outline-light text-dark{% endif %}"
+                href="{% url 'admin_predictions' %}">
+                <i class="fas fa-leaf me-2"></i>Disease Predictions
+            </a>
+
+            <small class="text-uppercase text-muted fw-bold mt-2">Account</small>
+            <a class="btn btn-sm text-start {% if request.resolver_match.url_name == 'change_password_admin' %}btn-primary{% else %}btn-outline-light text-dark{% endif %}"
+                href="{% url 'change_password_admin' %}">
+                <i class="fas fa-key me-2"></i>Change Password
+            </a>
+            <a class="btn btn-sm text-start btn-danger mt-2 text-white" href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+            </a>
+        </div>
+    </div>
+</div>

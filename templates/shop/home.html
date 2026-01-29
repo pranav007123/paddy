@@ -1,0 +1,129 @@
+{% extends 'shop/shop_base.html' %}
+
+{% block title %}Home - Plant Health System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-success text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="display-4">Plant Health Management System</h1>
+                <p class="lead">Discover plants, connect with shops, and grow your garden with our comprehensive platform.</p>
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'signup' %}" class="btn btn-light btn-lg me-2">Get Started</a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">Login</a>
+                {% endif %}
+            </div>
+            <div class="col-md-6 text-center">
+                <i class="fas fa-leaf fa-10x text-white opacity-75"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Categories -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Plant Categories</h2>
+        <div class="row">
+            {% for category in categories %}
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <i class="fas fa-seedling fa-3x text-success mb-3"></i>
+                            <h5 class="card-title">{{ category.name }}</h5>
+                            <p class="card-text">{{ category.description|truncatewords:10 }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <p class="text-muted">No categories available yet.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Plants -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">Featured Plants</h2>
+        <div class="row">
+            {% for plant in featured_plants %}
+                <div class="col-md-3 mb-4">
+                    <div class="card plant-card h-100">
+                        <img src="{{ plant.image.url|default:'https://via.placeholder.com/300x200' }}" class="card-img-top" alt="{{ plant.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ plant.name }}</h5>
+                            <p class="card-text">{{ plant.description|truncatewords:15 }}</p>
+                            <p class="card-text"><strong>₹{{ plant.price }}</strong></p>
+                            <a href="{% url 'view_categories_plants' %}" class="btn btn-success">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <p class="text-muted">No plants available yet.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Shops -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Featured Shops</h2>
+        <div class="row">
+            {% for shop in featured_shops %}
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 shop-card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ shop.shop_name }}</h5>
+                            <p class="card-text"><i class="fas fa-map-marker-alt text-success me-2"></i>{{ shop.address|truncatewords:5 }}</p>
+                            <p class="card-text">{{ shop.description|truncatewords:10 }}</p>
+                            <a href="{% url 'view_shops_user' %}" class="btn btn-outline-success">Visit Shop</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <p class="text-muted">No shops available yet.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">How It Works</h2>
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="p-4">
+                    <i class="fas fa-search fa-3x text-success mb-3"></i>
+                    <h4>Browse Plants</h4>
+                    <p>Discover a wide variety of plants from different shops in our platform.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="p-4">
+                    <i class="fas fa-shopping-cart fa-3x text-success mb-3"></i>
+                    <h4>Add to Cart</h4>
+                    <p>Add your favorite plants to cart and proceed to checkout.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="p-4">
+                    <i class="fas fa-leaf fa-3x text-success mb-3"></i>
+                    <h4>Grow & Care</h4>
+                    <p>Receive your plants and follow care instructions to grow healthy plants.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

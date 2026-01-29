@@ -1,0 +1,51 @@
+{% block content %}
+{% load static %}
+{% include 'header.html' %}
+
+<div class="contact-box-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-sm-12">
+                <div class="contact-form-right">
+                    <h2> View Registered Officers </h2>
+                    <div class="row">
+                    <table class="table table-bordered">
+                         <tr>
+                            <th>ID</th>
+                            <th>OFFICER NAME</th>
+                            <th>OFFICER ID</th>
+                            <th>DATE</th>
+                            <th>NAME</th>
+                            <th>STATUS</th>
+                            
+                            
+                         </tr>
+                        {% for i in result %}
+                           <tr>
+                              <td>{{forloop.counter}}</td>
+                              <td>{{i.officer_name}}</td>
+                              <td>{{i.officer_id}}</td>
+                              <td>{{i.date}}</td>
+                              <td>{{i.time}}</td>
+
+                                 {% if i.status == 'pending' %}
+                                  <td><a href="officer_accept/{{i.id}}">Accepted</a><br>
+                                    <a href="officer_reject/{{i.id}}">Rejected</a></td>
+
+                                  {% else %}
+                                  <td>{{i.status}}</td>
+                                  {% endif %}
+
+                            </tr>
+                           
+                        {% endfor %}
+                    </table>
+                    </div>
+                    
+                </div>
+            </div>              
+    </div>
+</div>
+<!-- End Cart -->
+{% include 'footer.html' %}
+{% endblock %}

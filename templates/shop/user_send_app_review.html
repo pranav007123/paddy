@@ -1,0 +1,64 @@
+{% extends 'shop/shop_base.html' %}
+
+{% block title %}App Review - Plant Health System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h2><i class="fas fa-star me-2"></i>Send App Review</h2>
+            <hr>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Rating</label>
+                    <select class="form-control" id="rating" name="rating" required>
+                        <option value="">Select Rating</option>
+                        <option value="1">1 Star - Poor</option>
+                        <option value="2">2 Stars - Fair</option>
+                        <option value="3">3 Stars - Good</option>
+                        <option value="4">4 Stars - Very Good</option>
+                        <option value="5">5 Stars - Excellent</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Comment (Optional)</label>
+                    <textarea class="form-control" id="comment" name="comment" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">Submit Review</button>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-history me-2"></i>Previous Reviews</h5>
+                </div>
+                <div class="card-body">
+                    {% if reviews %}
+                        {% for review in reviews %}
+                        <div class="mb-3">
+                            <div class="d-flex">
+                                {% for i in "12345" %}
+                                    {% if i|add:0 <= review.rating %}
+                                        <i class="fas fa-star text-warning me-1"></i>
+                                    {% else %}
+                                        <i class="far fa-star text-warning me-1"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <p class="small text-muted mb-1">Date: {{ review.created_at|date:"M d, Y" }}</p>
+                            {% if review.comment %}
+                                <p class="small">{{ review.comment }}</p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No reviews submitted yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5 mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="feature-card shadow-lg">
+                <div class="card-body p-4">
+                    <span class="section-tag">AI Diagnostics</span>
+                    <h2 class="mb-4">Mango Health Analysis</h2>
+                    <p class="text-muted mb-4">Upload a photo of the mango leaf to detect diseases like Anthracnose,
+                        Powdery Mildew, or Sooty Mold.</p>
+
+                    {% if message %}
+                    <div class="alert alert-info border-0 shadow-sm" style="background: #eff6ff; color: #1e40af;">
+                        <i class="fas fa-info-circle me-2"></i> {{message}}
+                    </div>
+                    {% endif %}
+
+                    <form method="POST" action="{% url 'add_mango_file' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="upload-box mb-4">
+                            <i class="fas fa-image upload-icon" style="color: #fbbf24;"></i>
+                            <div class="form-group">
+                                <label class="d-block mb-3 font-weight-bold">Select Mango Leaf</label>
+                                <input type="file" name="mango" class="form-control" style="border-radius: 10px;"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit"
+                                class="btn btn-premium btn-premium-primary w-100 justify-content-center">
+                                <i class="fas fa-brain"></i> Start Analysis
+                            </button>
+                        </div>
+                    </form>
+
+                    {% if result %}
+                    <div class="mt-5 text-center animate__animated animate__fadeInUp">
+                        <div class="p-4 rounded-3" style="background: #fffbeb; border: 1px solid #fde68a;">
+                            <h5 class="text-muted mb-2">Detection Result</h5>
+                            <h3 class="display-6 font-weight-bold" style="color: #b45309;">{{result}}</h3>
+                            <a href="#" class="btn btn-link text-warning mt-2">Recommended Remedies <i
+                                    class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

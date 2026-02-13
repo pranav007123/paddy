@@ -1,41 +1,48 @@
-{% block content %}
+{% extends 'base.html' %}
 {% load static %}
-{% include 'header.html' %}
 
-<div class="contact-box-main">
+{% block content %}
+<div class="contact-box-main py-5">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-sm-12">
-                <div class="contact-form-right">
-                    <h2> View Add Files</h2>
-                    <div class="row">
-                    <table class="table table-bordered">
-                         <tr>
-                            <th>ID</th>
-                            <th>USER ID</th>
-                            <th>FILE</th>
-                             <th>RESULT</th>
-                           
-                            
-                            
-                         </tr>
-                        {% for i in result %}
-                           <tr>
-                              <td>{{forloop.counter}}</td>
-                              <td>{{i.userid}}</td>
-                              <td>{{i.file}}</td>
-                              <td>{{i.result}}</td>
-                              
-                            </tr>
-                           
-                        {% endfor %}
-                    </table>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="feature-card shadow-lg p-4">
+                    <span class="section-tag">Diagnostic Logs</span>
+                    <h2 class="mb-4">Analysis History</h2>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>USER ID</th>
+                                    <th>FILE</th>
+                                    <th>RESULT</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in result %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td><span class="badge badge-outline-secondary">#{{i.userid}}</span></td>
+                                    <td>
+                                        <a href="{{ i.file.url }}" class="text-primary" target="_blank">
+                                            <i class="fas fa-file-image mr-1"></i> View Leaf
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span
+                                            class="font-weight-bold {% if 'Healthy' in i.result %}text-success{% else %}text-danger{% endif %}">
+                                            {{i.result}}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
-                    
                 </div>
-            </div>              
+            </div>
+        </div>
     </div>
 </div>
-<!-- End Cart -->
-{% include 'footer.html' %}
 {% endblock %}

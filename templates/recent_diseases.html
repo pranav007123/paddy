@@ -1,87 +1,77 @@
-{% block content %}
+{% extends 'base.html' %}
 {% load static %}
-{% include 'header.html' %}
 
-
-<div class="latest-blog">
+{% block content %}
+<section class="py-5">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="title-all text-center">
-                   
-                    
-                </div>
+        <div class="row mb-5 text-center">
+            <div class="col-12">
+                <span class="section-tag">Agricultural Knowledge</span>
+                <h2 class="section-title">Common Leaf Pathogens</h2>
+                <p class="text-muted">Explore high-resolution samples of recently identified crop diseases across the
+                    region.</p>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 col-lg-3 col-xl-3">
-                <div class="blog-box">
-                    <div class="blog-img">
-                        <img class="img-fluid" src="{% static 'images\leaf_blast_val (65).jpg' %}" alt="" />
-                    </div>
-                    <div class="blog-content">
-                        <div class="title-blog">
-                            <h3>Fusce in augue non nisi fringilla</h3>
-                            <p>Nulla ut urna egestas, porta libero id, suscipit orci. Quisque in lectus sit amet urna dignissim feugiat. Mauris molestie egestas pharetra. Ut finibus cursus nunc sed mollis. Praesent laoreet lacinia elit id lobortis.</p>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="feature-card shadow-sm p-0 overflow-hidden">
+                    <img class="img-fluid w-100" src="{% static 'images/leaf_blast_val (65).jpg' %}" alt="Leaf Blast"
+                        style="height: 200px; object-fit: cover;">
+                    <div class="p-3">
+                        <h5 class="font-weight-bold mb-2">Paddy Leaf Blast</h5>
+                        <p class="small text-muted mb-3">Characteristic diamond-shaped lesions observed on seedlings.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge badge-soft-danger">Critical</span>
+                            <div class="text-primary small"><i class="fas fa-eye mr-1"></i> 150 Views</div>
                         </div>
-                        <ul class="option-blog">
-                            <li><a href="#"><i class="far fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fas fa-eye"></i></a></li>
-                            <li><a href="#"><i class="far fa-comments"></i></a></li>
-                        </ul>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3 col-xl-3">
-                <div class="blog-box">
-                    <div class="blog-img">
-                        <img class="img-fluid" src="{% static 'images\bacterial_val (87).jpg' %}" alt="" />
-                    </div>
-                    <div class="blog-content">
-                        <div class="title-blog">
-                            <h3>Fusce in augue non nisi fringilla</h3>
-                            <p>Nulla ut urna egestas, porta libero id, suscipit orci. Quisque in lectus sit amet urna dignissim feugiat. Mauris molestie egestas pharetra. Ut finibus cursus nunc sed mollis. Praesent laoreet lacinia elit id lobortis.</p>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="feature-card shadow-sm p-0 overflow-hidden">
+                    <img class="img-fluid w-100" src="{% static 'images/bacterial_val (87).jpg' %}"
+                        alt="Bacterial Blight" style="height: 200px; object-fit: cover;">
+                    <div class="p-3">
+                        <h5 class="font-weight-bold mb-2">Bacterial Blight</h5>
+                        <p class="small text-muted mb-3">Water-soaked lesions turning yellow-orange on mature leaves.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge badge-soft-warning">Active</span>
+                            <div class="text-primary small"><i class="fas fa-eye mr-1"></i> 98 Views</div>
                         </div>
-                        <ul class="option-blog">
-                            <li><a href="#"><i class="far fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fas fa-eye"></i></a></li>
-                            <li><a href="#"><i class="far fa-comments"></i></a></li>
-                        </ul>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3 col-xl-3">
-                <div class="blog-box">
-                    <div class="blog-img">
-                        <img class="img-fluid" src="{% static 'images\leaf_scald_val (39).jpg' %}" alt="" />
-                    </div>
-                    <div class="blog-content">
-                        <div class="title-blog">
-                            <h3>Fusce in augue non nisi fringilla</h3>
-                            <p>Nulla ut urna egestas, porta libero id, suscipit orci. Quisque in lectus sit amet urna dignissim feugiat. Mauris molestie egestas pharetra. Ut finibus cursus nunc sed mollis. Praesent laoreet lacinia elit id lobortis.</p>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="feature-card shadow-sm p-0 overflow-hidden">
+                    <img class="img-fluid w-100" src="{% static 'images/leaf_scald_val (39).jpg' %}" alt="Leaf Scald"
+                        style="height: 200px; object-fit: cover;">
+                    <div class="p-3">
+                        <h5 class="font-weight-bold mb-2">Paddy Leaf Scald</h5>
+                        <p class="small text-muted mb-3">Zonate lesions starting from the tips of maturing plants.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge badge-soft-info">Observational</span>
+                            <div class="text-primary small"><i class="fas fa-eye mr-1"></i> 45 Views</div>
                         </div>
-                        
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3 col-xl-3">
-                <div class="blog-box">
-                    <div class="blog-img">
-                        <img class="img-fluid" src="{% static 'images\brown_val (60).jpg' %}" alt="" />
-                    </div>
-                    <div class="blog-content">
-                        <div class="title-blog">
-                            <h3>Fusce in augue non nisi fringilla</h3>
-                            <p>Nulla ut urna egestas, porta libero id, suscipit orci. Quisque in lectus sit amet urna dignissim feugiat. Mauris molestie egestas pharetra. Ut finibus cursus nunc sed mollis. Praesent laoreet lacinia elit id lobortis.</p>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="feature-card shadow-sm p-0 overflow-hidden">
+                    <img class="img-fluid w-100" src="{% static 'images/brown_val (60).jpg' %}" alt="Brown Spot"
+                        style="height: 200px; object-fit: cover;">
+                    <div class="p-3">
+                        <h5 class="font-weight-bold mb-2">Brown Spot</h5>
+                        <p class="small text-muted mb-3">Circular brown lesions with yellow halos across the blade.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge badge-soft-success">Managed</span>
+                            <div class="text-primary small"><i class="fas fa-eye mr-1"></i> 210 Views</div>
                         </div>
-                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-
-{% include 'footer.html' %}
+</section>
 {% endblock %}

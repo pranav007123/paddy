@@ -34,6 +34,7 @@ urlpatterns = [
     path('addfile',views.addfile, name='add_paddy_file'),
     path('addfile_mango',views.addfile_mango, name='add_mango_file'),
     path('result',views.result, name='result'),
+    path('account/',views.account, name='account'),
     path('shop/', include('shop.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

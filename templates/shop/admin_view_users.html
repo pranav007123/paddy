@@ -1,74 +1,111 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Manage Users - Admin{% endblock %}
+{% block title %}User Directory - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container py-5">
+    <div class="row mb-5 align-items-center">
+        <div class="col-md-6">
+            <span class="section-tag">Identity Management</span>
+            <h2 class="section-title mb-0"><i class="fas fa-users me-2 text-primary"></i>Global User Directory</h2>
+        </div>
+        <div class="col-md-6 mt-4 mt-md-0">
+            <form class="d-flex shadow-sm rounded-pill bg-white p-1" method="GET" action="{% url 'view_users' %}"
+                style="border: 1px solid #e2e8f0;">
+                <input class="form-control border-0 bg-transparent ps-4" type="search" name="q"
+                    placeholder="Search by name, email, or phone..." value="{{ search_query|default:'' }}"
+                    aria-label="Search" style="box-shadow: none;">
+                <button class="btn btn-premium btn-premium-primary rounded-pill px-4" type="submit">
+                    <i class="fas fa-search me-1"></i> Search
+                </button>
+                {% if search_query %}
+                <a href="{% url 'view_users' %}" class="btn btn-link text-muted pe-3 align-self-center">
+                    <i class="fas fa-times"></i>
+                </a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
     <div class="row">
-        <!-- Sidebar -->
-        <!-- Sidebar -->
-        {% include 'shop/includes/admin_sidebar.html' %}
-
-        <div class="col-md-9">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="mt-4"><i class="fas fa-users me-2"></i>Manage Users</h2>
-                <form class="d-flex mt-4" method="GET" action="{% url 'view_users' %}">
-                    <input class="form-control me-2" type="search" name="q" placeholder="Search users..."
-                        value="{{ search_query|default:'' }}" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                    {% if search_query %}
-                    <a href="{% url 'view_users' %}" class="btn btn-outline-secondary ms-2">Clear</a>
-                    {% endif %}
-                </form>
-            </div>
-            <hr>
-
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped align-middle">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Role</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for user in users %}
-                                <tr>
-                                    <td>{{ user.name }}</td>
-                                    <td>{{ user.email }}</td>
-                                    <td>{{ user.phone_number }}</td>
-                                    <td>
-                                        {% if user.is_shop_owner %}
-                                        <span class="badge bg-primary">Shop Owner</span>
-                                        {% else %}
-                                        <span class="badge bg-secondary">User</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <form action="{% url 'delete_user' user.id %}" method="post"
-                                            onsubmit="return confirm('Are you sure you want to delete this user? This cannot be undone.');">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-sm btn-danger"><i
-                                                    class="fas fa-trash-alt"></i> Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="5" class="text-center">No users found</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+        <div class="col-12">
+            <div class="feature-card p-0 overflow-hidden">
+                <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="font-weight-bold mb-0">Registered Entities ({{ users|length }})</h5>
+                    <div class="small text-muted">Total records synced</div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light small">
+                            <tr>
+                                <th class="ps-4">Profile</th>
+                                <th>Contact Access</th>
+                                <th>Account Role</th>
+                                <th class="pe-4 text-center">Data Privacy Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            {% for user in users %}
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-light-primary text-primary rounded-circle d-flex align-items-center justify-content-center me-3"
+                                            style="width: 40px; height: 40px; background: rgba(30, 41, 59, 0.05);">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-weight-bold h6 mb-0">{{ user.name }}</div>
+                                            <span class="text-muted small">@{{ user.username }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="mb-1"><i class="fas fa-envelope text-muted me-2"></i>{{ user.email }}
+                                    </div>
+                                    <div><i class="fas fa-phone text-muted me-2"></i>{{ user.phone_number }}</div>
+                                </td>
+                                <td>
+                                    {% if user.is_shop_owner %}
+                                    <span class="badge rounded-pill bg-emerald text-white px-3 py-2">
+                                        <i class="fas fa-store me-1"></i> Vendor
+                                    </span>
+                                    {% else %}
+                                    <span class="badge rounded-pill bg-light text-dark px-3 py-2 border">
+                                        <i class="fas fa-user-circle me-1"></i> Consumer
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td class="pe-4 text-center">
+                                    <form action="{% url 'delete_user' user.id %}" method="post"
+                                        onsubmit="return confirm('Data Deletion: Are you sure you want to permanently erase this user record? This action is irreversible.');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger px-3"
+                                            style="border-radius: 8px;">
+                                            <i class="fas fa-user-slash me-2"></i>Terminate
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="p-5 text-center text-muted">
+                                    <i class="fas fa-user-slash fa-3x mb-3 opacity-25"></i>
+                                    <p class="mb-0">No user records found matching your filters.</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .bg-emerald {
+        background-color: var(--primary) !important;
+    }
+</style>
 {% endblock %}

@@ -1,60 +1,90 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Shop Reviews - Plant Health System{% endblock %}
+{% block title %}Product Feedback - Agricultural Intelligence{% endblock %}
 
-<div class="container">
-    <div class="row mt-5">
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-5">
         <div class="col-12">
-            <h2 class="text-success"><i class="fas fa-star me-2"></i>Customer Reviews for Your Products</h2>
-            <hr class="mb-4">
+            <span class="section-tag">Quality Assurance</span>
+            <h2 class="section-title"><i class="fas fa-star text-primary me-2"></i>Product Experience Reviews</h2>
+        </div>
+    </div>
 
-            {% if reviews %}
-            <div class="row">
-                {% for review in reviews %}
-                <div class="col-md-12 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <h6 class="text-muted">Product</h6>
-                                    <p class="mb-0"><strong>{{ review.plant.name }}</strong></p>
-                                    <small class="text-muted">{{ review.plant.category.name }}</small>
-                                </div>
-                                <div class="col-md-3">
-                                    <h6 class="text-muted">Customer</h6>
-                                    <p class="mb-0">{{ review.user.name }}</p>
-                                    <small class="text-muted">{{ review.user.email }}</small>
-                                </div>
-                                <div class="col-md-2">
-                                    <h6 class="text-muted">Rating</h6>
-                                    <div>
-                                        {% for i in "12345" %}
-                                        {% if forloop.counter <= review.rating %} <i class="fas fa-star text-warning">
-                                            </i>
-                                            {% else %}
-                                            <i class="far fa-star text-muted"></i>
-                                            {% endif %}
-                                            {% endfor %}
-                                    </div>
-                                    <small class="text-muted">({{ review.rating }}/5)</small>
-                                </div>
-                                <div class="col-md-4">
-                                    <h6 class="text-muted">Review</h6>
-                                    <p class="mb-0">{{ review.comment }}</p>
-                                    <small class="text-muted">{{ review.created_at|date:"M d, Y" }}</small>
-                                </div>
-                            </div>
+    {% if reviews %}
+    <div class="row">
+        {% for review in reviews %}
+        <div class="col-lg-6 mb-4">
+            <div class="feature-card h-100 p-4">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-light rounded-circle shadow-sm d-flex align-items-center justify-content-center me-3"
+                            style="width: 48px; height: 48px;">
+                            <i class="fas fa-user text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="font-weight-bold mb-0 text-dark">{{ review.user.name|default:review.user.username
+                                }}</h6>
+                            <span class="text-muted small">{{ review.created_at|date:"M d, Y" }}</span>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <div class="text-primary mb-1">
+                            {% for i in "12345" %}
+                            {% if forloop.counter <= review.rating %} <i class="fas fa-star"></i>
+                                {% else %}
+                                <i class="far fa-star text-muted"></i>
+                                {% endif %}
+                                {% endfor %}
+                        </div>
+                        <span class="badge bg-light text-primary font-weight-bold" style="font-size: 0.75rem;">{{
+                            review.rating }}.0 / 5.0</span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <span class="small font-weight-bold text-muted text-uppercase d-block mb-1">Product Reviewed</span>
+                    <div class="d-flex align-items-center p-2 rounded-3 bg-light"
+                        style="border: 1px solid rgba(0,0,0,0.05);">
+                        {% if review.plant.image %}
+                        <img src="{{ review.plant.image.url }}" alt="{{ review.plant.name }}" width="40" height="40"
+                            class="rounded-2 me-2" style="object-fit: cover;">
+                        {% endif %}
+                        <div>
+                            <span class="font-weight-bold d-block">{{ review.plant.name }}</span>
+                            <span class="text-muted small">{{ review.plant.category.name }}</span>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
+
+                <div class="review-content p-3 rounded-3 bg-light-soft"
+                    style="background: rgba(30, 41, 59, 0.02); min-height: 80px;">
+                    <i class="fas fa-quote-left text-primary opacity-25 me-2"></i>
+                    <p class="mb-0 text-secondary" style="font-style: italic;">{{ review.comment }}</p>
+                </div>
             </div>
-            {% else %}
-            <div class="alert alert-info text-center">
-                <i class="fas fa-info-circle me-2"></i>No reviews available for your products yet.
-            </div>
-            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <div class="hero-glass-card d-inline-block px-5 py-5"
+            style="background: rgba(5, 150, 105, 0.05); border: 1px solid rgba(5, 150, 105, 0.1);">
+            <i class="fas fa-comments fa-5x text-success mb-4 opacity-50"></i>
+            <h3 class="text-secondary">No reviews collected</h3>
+            <p class="text-muted mb-4">You haven't received any product reviews from your customers yet.</p>
+            <a href="{% url 'shop_dashboard' %}" class="btn btn-premium btn-premium-primary">
+                Explore More
+            </a>
         </div>
     </div>
+    {% endif %}
 </div>
+
+<style>
+    .bg-light-soft {
+        background: #f8fafc;
+    }
+</style>
 {% endblock %}

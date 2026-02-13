@@ -1,51 +1,98 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Shops - Plant Health System{% endblock %}
+{% block title %}Merchant Network - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2><i class="fas fa-store me-2"></i>Available Shops</h2>
-    <hr>
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-12">
+            <span class="section-tag">Partner Ecosystem</span>
+            <h2 class="section-title mb-0"><i class="fas fa-store me-2 text-primary"></i>Certified Agricultural
+                Merchants</h2>
+            <p class="text-muted mt-2">Discover and connect with verified distributors in our secure trading network.
+            </p>
+        </div>
+    </div>
 
     {% if shops %}
-        <div class="row">
-            {% for shop in shops %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shop-card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ shop.shop_name }}</h5>
-                        <p class="card-text">{{ shop.description|default:"No description available." }}</p>
-                        <p class="card-text"><i class="fas fa-map-marker-alt text-success me-2"></i>{{ shop.address }}</p>
-                        <p class="card-text"><i class="fas fa-envelope text-info me-2"></i>{{ shop.email }}</p>
-                        {% if shop.contact_number %}
-                            <p class="card-text"><i class="fas fa-phone text-warning me-2"></i>{{ shop.contact_number }}</p>
-                        {% endif %}
-                        <p class="card-text">
-                            <small class="text-muted">
-                                Status: 
-                                <span class="badge 
-                                    {% if shop.status == 'approved' %}bg-success
-                                    {% elif shop.status == 'pending' %}bg-warning
-                                    {% else %}bg-danger{% endif %}">
-                                    {{ shop.status|title }}
-                                </span>
-                            </small>
-                        </p>
+    <div class="row">
+        {% for shop in shops %}
+        <div class="col-md-4 mb-4">
+            <div class="feature-card p-0 h-100 overflow-hidden transition-up">
+                <div class="p-4 border-bottom bg-light d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <div class="p-3 bg-white rounded-circle shadow-sm me-3">
+                            <i class="fas fa-store text-primary"></i>
+                        </div>
+                        <h5 class="font-weight-bold mb-0 text-dark">{{ shop.shop_name }}</h5>
                     </div>
-                    <div class="card-footer">
-                        <a href="{% url 'view_categories_plants' %}" class="btn btn-success btn-sm">View Plants</a>
-                        <a href="{% url 'send_shop_review' shop.id %}" class="btn btn-outline-primary btn-sm">Review</a>
+                    <span class="badge rounded-pill px-3 py-2 
+                            {% if shop.status == 'approved' %}bg-emerald text-white
+                            {% elif shop.status == 'pending' %}bg-warning text-dark
+                            {% else %}bg-danger text-white{% endif %}" style="font-size: 0.65rem; font-weight: 600;">
+                        {{ shop.status|upper }}
+                    </span>
+                </div>
+                <div class="p-4">
+                    <p class="text-muted small mb-4" style="min-height: 4.5rem;">{{
+                        shop.description|default:"Proprietary merchant description pending synchronization." }}</p>
+
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-map-marker-alt text-primary me-3" style="width: 16px;"></i>
+                        <span class="small text-muted">{{ shop.address }}</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-envelope text-primary me-3" style="width: 16px;"></i>
+                        <span class="small text-muted">{{ shop.email }}</span>
+                    </div>
+                    {% if shop.contact_number %}
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="fas fa-phone text-primary me-3" style="width: 16px;"></i>
+                        <span class="small text-muted">{{ shop.contact_number }}</span>
+                    </div>
+                    {% endif %}
+
+                    <div class="row g-2 pt-3">
+                        <div class="col-6">
+                            <a href="{% url 'view_categories_plants' %}"
+                                class="btn btn-premium btn-premium-primary w-100 btn-sm py-2">
+                                <i class="fas fa-seedling me-1"></i> Catalog
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="{% url 'send_shop_review' shop.id %}"
+                                class="btn btn-premium btn-premium-outline w-100 btn-sm py-2">
+                                <i class="fas fa-star me-1"></i> Review
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
+    </div>
     {% else %}
-        <div class="text-center">
-            <i class="fas fa-store fa-5x text-muted mb-3"></i>
-            <h4>No shops available yet</h4>
-            <p class="text-muted">Check back later for more shops joining our platform.</p>
+    <div class="feature-card p-5 text-center">
+        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4"
+            style="width: 100px; height: 100px;">
+            <i class="fas fa-store-slash fa-3x text-muted"></i>
         </div>
+        <h4 class="font-weight-bold">Infrastructure Offline</h4>
+        <p class="text-muted">No merchant nodes are currently active in the registry. Please check back during
+            operational hours.</p>
+    </div>
     {% endif %}
 </div>
+
+<style>
+    .transition-up {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .transition-up:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+</style>
 {% endblock %}

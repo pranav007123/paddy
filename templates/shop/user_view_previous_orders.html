@@ -1,115 +1,147 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Previous Orders - Plant Health System{% endblock %}
+{% block title %}Order History - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2><i class="fas fa-history me-2"></i>Previous Orders</h2>
-    <hr>
-
-    {% if orders %}
-    {% for order in orders %}
-    <div class="card mb-4">
-        <div class="card-header">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>Order #{{ order.id }}</h5>
-                    <p class="text-muted mb-0">Placed on {{ order.created_at|date:"M d, Y" }}</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <span class="badge 
-                            {% if order.order_status == 'pending' %}bg-warning
-                            {% elif order.order_status == 'confirmed' %}bg-info
-                            {% elif order.order_status == 'shipped' %}bg-primary
-                            {% elif order.order_status == 'delivered' %}bg-success
-                            {% else %}bg-danger{% endif %}">
-                        {{ order.order_status|title }}
-                    </span>
-                    <p class="mb-0 mt-1">Total: ₹{{ order.total_amount }}</p>
-                    <a href="{% url 'order_receipt' order.id %}" class="btn btn-sm btn-outline-success mt-2"
-                        target="_blank">
-                        <i class="fas fa-download"></i> Download Receipt
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="card-body">
-            <h6>Order Items:</h6>
-            <div class="table-responsive">
-                <table class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th>Plant</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Total</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in order.items.all %}
-                        <tr>
-                            <td>{{ item.plant.name }}</td>
-                            <td>{{ item.quantity }}</td>
-                            <td>₹{{ item.price }}</td>
-                            <td>₹{{ item.total_price|floatformat:2 }}</td>
-                            <td>
-                                <button type="button" class="btn btn-sm btn-outline-warning" data-bs-toggle="modal"
-                                    data-bs-target="#rateModal{{ item.plant.id }}-{{ order.id }}">
-                                    <i class="fas fa-star"></i> Rate
-                                </button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <p class="mb-0"><strong>Shipping Address:</strong></p>
-            <p class="text-muted">{{ order.shipping_address }}</p>
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-12">
+            <span class="section-tag">Shopping Activity</span>
+            <h2 class="section-title"><i class="fas fa-history me-2"></i>My Order History</h2>
         </div>
     </div>
-    {% endfor %}
 
-    <!-- All Rating Modals (Outside Tables) -->
+    {% if orders %}
+    <div class="row">
+        <div class="col-12">
+            {% for order in orders %}
+            <div class="feature-card mb-4 overflow-hidden p-0">
+                <div class="border-bottom bg-light px-4 py-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-1 font-weight-bold">Order #{{ order.id }}</h5>
+                        <p class="text-muted small mb-0">Placed on {{ order.created_at|date:"M d, Y" }}</p>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge rounded-pill mb-2 px-3 py-2 
+                                {% if order.order_status == 'pending' %}bg-warning text-dark
+                                {% elif order.order_status == 'confirmed' %}bg-info text-white
+                                {% elif order.order_status == 'paid' %}bg-success text-white
+                                {% elif order.order_status == 'shipped' %}bg-primary text-white
+                                {% elif order.order_status == 'delivered' %}bg-emerald text-white
+                                {% else %}bg-danger text-white{% endif %}">
+                            <i
+                                class="fas {% if order.order_status == 'delivered' %}fa-check-circle{% else %}fa-clock{% endif %} me-1"></i>
+                            {{ order.order_status|title }}
+                        </span>
+                        <div class="h5 font-weight-bold text-primary mb-0">₹{{ order.total_amount }}</div>
+                    </div>
+                </div>
+
+                <div class="p-4">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <h6 class="font-weight-bold mb-3">Order Items</h6>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead class="bg-light small">
+                                        <tr>
+                                            <th>Plant</th>
+                                            <th class="text-center">Qty</th>
+                                            <th class="text-center">Price</th>
+                                            <th class="text-end">Subtotal</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="small">
+                                        {% for item in order.items.all %}
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="font-weight-bold">{{ item.plant.name }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">{{ item.quantity }}</td>
+                                            <td class="text-center">₹{{ item.price }}</td>
+                                            <td class="text-end font-weight-bold">₹{{ item.total_price|floatformat:2 }}
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                                    style="border-radius: 8px;" data-toggle="modal"
+                                                    data-target="#rateModal{{ item.plant.id }}-{{ order.id }}">
+                                                    <i class="fas fa-star me-1"></i> Rate
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="bg-light p-3 rounded-3 h-100">
+                                <h6 class="font-weight-bold mb-3"><i class="fas fa-truck me-2 text-primary"></i>Shipping
+                                    to</h6>
+                                <p class="text-muted small mb-3">{{ order.shipping_address }}</p>
+                                <a href="{% url 'order_receipt' order.id %}"
+                                    class="btn btn-sm btn-premium btn-premium-outline w-100" target="_blank"
+                                    style="color: var(--primary) !important; border-color: var(--primary);">
+                                    <i class="fas fa-file-invoice me-2"></i>View Receipt
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Rating Modals -->
     {% for order in orders %}
     {% for item in order.items.all %}
     <div class="modal fade" id="rateModal{{ item.plant.id }}-{{ order.id }}" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Rate {{ item.plant.name }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="modal-header border-0 pb-0">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <form action="{% url 'add_review' item.plant.id %}" method="POST">
                     {% csrf_token %}
-                    <div class="modal-body">
-                        <div class="mb-3 text-center">
-                            <label class="form-label">Rating</label>
-                            <div class="rating-stars">
-                                <input type="radio" name="rating" value="5" id="s5-{{ item.plant.id }}-{{ order.id }}"
-                                    required><label for="s5-{{ item.plant.id }}-{{ order.id }}">★</label>
-                                <input type="radio" name="rating" value="4"
-                                    id="s4-{{ item.plant.id }}-{{ order.id }}"><label
-                                    for="s4-{{ item.plant.id }}-{{ order.id }}">★</label>
-                                <input type="radio" name="rating" value="3"
-                                    id="s3-{{ item.plant.id }}-{{ order.id }}"><label
-                                    for="s3-{{ item.plant.id }}-{{ order.id }}">★</label>
-                                <input type="radio" name="rating" value="2"
-                                    id="s2-{{ item.plant.id }}-{{ order.id }}"><label
-                                    for="s2-{{ item.plant.id }}-{{ order.id }}">★</label>
-                                <input type="radio" name="rating" value="1"
-                                    id="s1-{{ item.plant.id }}-{{ order.id }}"><label
-                                    for="s1-{{ item.plant.id }}-{{ order.id }}">★</label>
-                            </div>
+                    <div class="modal-body pt-0 text-center">
+                        <div class="mb-4">
+                            <i class="fas fa-star fa-3x text-warning opacity-25"></i>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Review</label>
-                            <textarea name="comment" class="form-control" rows="3" required></textarea>
+                        <h4 class="font-weight-bold mb-2">Rate Your Plant</h4>
+                        <p class="text-muted mb-4 small">How was your experience with <strong>{{ item.plant.name
+                                }}</strong>?</p>
+
+                        <div class="rating-stars mb-4">
+                            <input type="radio" name="rating" value="5" id="s5-{{ item.plant.id }}-{{ order.id }}"
+                                required>
+                            <label for="s5-{{ item.plant.id }}-{{ order.id }}">★</label>
+                            <input type="radio" name="rating" value="4" id="s4-{{ item.plant.id }}-{{ order.id }}">
+                            <label for="s4-{{ item.plant.id }}-{{ order.id }}">★</label>
+                            <input type="radio" name="rating" value="3" id="s3-{{ item.plant.id }}-{{ order.id }}">
+                            <label for="s3-{{ item.plant.id }}-{{ order.id }}">★</label>
+                            <input type="radio" name="rating" value="2" id="s2-{{ item.plant.id }}-{{ order.id }}">
+                            <label for="s2-{{ item.plant.id }}-{{ order.id }}">★</label>
+                            <input type="radio" name="rating" value="1" id="s1-{{ item.plant.id }}-{{ order.id }}">
+                            <label for="s1-{{ item.plant.id }}-{{ order.id }}">★</label>
+                        </div>
+
+                        <div class="text-start mb-3">
+                            <label class="form-label small font-weight-bold">Detailed Review</label>
+                            <textarea name="comment" class="form-control" rows="3"
+                                placeholder="Share your thoughts about this plant..." required
+                                style="border-radius: 12px; border: 1px solid #e2e8f0;"></textarea>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-light" data-dismiss="modal"
+                            style="border-radius: 12px; padding: 10px 20px;">Cancel</button>
+                        <button type="submit" class="btn btn-premium btn-premium-primary"
+                            style="padding: 10px 30px;">Submit Review</button>
                     </div>
                 </form>
             </div>
@@ -119,11 +151,16 @@
     {% endfor %}
 
     {% else %}
-    <div class="text-center">
-        <i class="fas fa-history fa-5x text-muted mb-3"></i>
-        <h4>No previous orders</h4>
-        <p class="text-muted">You haven't placed any orders yet.</p>
-        <a href="{% url 'view_categories_plants' %}" class="btn btn-success">Start Shopping</a>
+    <div class="col-12 text-center py-5">
+        <div class="hero-glass-card d-inline-block px-5 py-5"
+            style="background: rgba(5, 150, 105, 0.05); border: 1px solid rgba(5, 150, 105, 0.1);">
+            <i class="fas fa-clipboard-list fa-5x text-success mb-4 opacity-50"></i>
+            <h3 class="text-secondary">No previous orders</h3>
+            <p class="text-muted mb-4">You haven't added any premium plants to your collection yet.</p>
+            <a href="{% url 'view_categories_plants' %}" class="btn btn-premium btn-premium-primary">
+                Start Shopping
+            </a>
+        </div>
     </div>
     {% endif %}
 </div>
@@ -140,18 +177,24 @@
     }
 
     .rating-stars label {
-        font-size: 2rem;
-        color: #ddd;
+        font-size: 2.5rem;
+        color: #e2e8f0;
         cursor: pointer;
+        transition: color 0.2s;
+        margin: 0 5px;
     }
 
     .rating-stars input:checked~label {
-        color: #ffc107;
+        color: #fbbf24;
     }
 
     .rating-stars label:hover,
     .rating-stars label:hover~label {
-        color: #ffc107;
+        color: #fbbf24;
+    }
+
+    .bg-emerald {
+        background-color: var(--primary) !important;
     }
 </style>
 {% endblock %}

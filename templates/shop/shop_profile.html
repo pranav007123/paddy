@@ -1,76 +1,139 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Shop Profile - Plant Health System{% endblock %}
+{% block title %}Shop Profile - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center mt-5">
+<div class="container py-5">
+    <div class="row justify-content-center">
         <div class="col-lg-8">
-            <div class="card shadow-lg border-0">
-                <div class="card-header bg-success text-white text-center py-4">
-                    <h3 class="mb-0"><i class="fas fa-store me-2"></i>Shop Profile</h3>
+            <div class="row mb-5 text-center">
+                <div class="col-12">
+                    <span class="section-tag">Business Identity</span>
+                    <h2 class="section-title mb-0"><i class="fas fa-store me-2 text-primary"></i>My Marketplace Profile
+                    </h2>
                 </div>
-                <div class="card-body p-4">
-                    <form method="post">
-                        {% csrf_token %}
-                        
-                        <div class="mb-4">
-                            <label for="shop_name" class="form-label fw-semibold">Shop Name</label>
-                            <input type="text" class="form-control" id="shop_name" name="shop_name" value="{{ shop.shop_name }}" required>
+            </div>
+
+            <div class="feature-card p-4 p-md-5">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-4">
+                        <label for="shop_name"
+                            class="form-label small font-weight-bold text-muted text-uppercase">Commercial Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"
+                                style="border-radius: 12px 0 0 12px;"><i
+                                    class="fas fa-building text-primary"></i></span>
+                            <input type="text" class="form-control border-start-0" id="shop_name" name="shop_name"
+                                value="{{ shop.shop_name }}" required style="border-radius: 0 12px 12px 0;">
                         </div>
-                        
-                        <div class="mb-4">
-                            <label for="contact_number" class="form-label fw-semibold">Contact Number</label>
-                            <input type="text" class="form-control" id="contact_number" name="contact_number" value="{{ shop.contact_number }}">
-                        </div>
-                        
-                        <div class="mb-4">
-                            <label for="email" class="form-label fw-semibold">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{ shop.email }}" required>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <label for="address" class="form-label fw-semibold">Address</label>
-                            <textarea class="form-control" id="address" name="address" rows="3" required>{{ shop.address }}</textarea>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <label for="description" class="form-label fw-semibold">Shop Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="4">{{ shop.description }}</textarea>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold">Shop Status</label>
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle me-2"></i>
-                                <strong>Status:</strong> 
-                                {% if shop.status == 'approved' %}
-                                    <span class="text-success">Approved</span>
-                                {% elif shop.status == 'pending' %}
-                                    <span class="text-warning">Pending Approval</span>
-                                {% elif shop.status == 'rejected' %}
-                                    <span class="text-danger">Rejected</span>
-                                {% else %}
-                                    <span>{{ shop.status|title }}</span>
-                                {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="contact_number"
+                                class="form-label small font-weight-bold text-muted text-uppercase">Helpline
+                                Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0"
+                                    style="border-radius: 12px 0 0 12px;"><i
+                                        class="fas fa-phone text-primary"></i></span>
+                                <input type="text" class="form-control border-start-0" id="contact_number"
+                                    name="contact_number" value="{{ shop.contact_number }}"
+                                    style="border-radius: 0 12px 12px 0;">
                             </div>
                         </div>
-                        
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-success btn-lg py-2">
-                                <i class="fas fa-save me-2"></i>Update Profile
-                            </button>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="email"
+                                class="form-label small font-weight-bold text-muted text-uppercase">Official
+                                Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0"
+                                    style="border-radius: 12px 0 0 12px;"><i
+                                        class="fas fa-envelope text-primary"></i></span>
+                                <input type="email" class="form-control border-start-0" id="email" name="email"
+                                    value="{{ shop.email }}" required style="border-radius: 0 12px 12px 0;">
+                            </div>
                         </div>
-                    </form>
-                    
-                    <div class="mt-4">
-                        <a href="{% url 'shop_dashboard' %}" class="btn btn-outline-secondary">
-                            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="address"
+                            class="form-label small font-weight-bold text-muted text-uppercase">Operations
+                            Address</label>
+                        <textarea class="form-control" id="address" name="address" rows="3" required
+                            style="border-radius: 12px;">{{ shop.address }}</textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="description"
+                            class="form-label small font-weight-bold text-muted text-uppercase">Business
+                            Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4"
+                            style="border-radius: 12px;">{{ shop.description }}</textarea>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="form-label small font-weight-bold text-muted text-uppercase">Verification
+                            Status</label>
+                        <div class="p-3 rounded-3 d-flex align-items-center"
+                            style="background: rgba(30, 41, 59, 0.05); border: 1px solid rgba(0,0,0,0.05);">
+                            <div class="me-3">
+                                {% if shop.status == 'approved' %}
+                                <i class="fas fa-check-circle fa-2x text-success"></i>
+                                {% elif shop.status == 'pending' %}
+                                <i class="fas fa-clock fa-2x text-warning"></i>
+                                {% else %}
+                                <i class="fas fa-times-circle fa-2x text-danger"></i>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <h6 class="font-weight-bold mb-1">
+                                    {% if shop.status == 'approved' %}
+                                    Approved Vendor
+                                    {% elif shop.status == 'pending' %}
+                                    Approval Pending
+                                    {% elif shop.status == 'rejected' %}
+                                    Registry Rejected
+                                    {% else %}
+                                    {{ shop.status|title }}
+                                    {% endif %}
+                                </h6>
+                                <p class="text-muted small mb-0">Our moderators have flagged this account as <strong>{{
+                                        shop.status }}</strong>.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn btn-premium btn-premium-primary px-5 py-3 flex-grow-1">
+                            <i class="fas fa-save me-2"></i>Apply Changes
+                        </button>
+                        <a href="{% url 'shop_dashboard' %}" class="btn btn-premium btn-premium-outline px-5 py-3">
+                            Dismiss
                         </a>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .input-group-text {
+        border-color: #e2e8f0;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.1);
+    }
+
+    .gap-3 {
+        gap: 1rem;
+    }
+</style>
 {% endblock %}

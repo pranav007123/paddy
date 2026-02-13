@@ -1,4 +1,3 @@
-{% block content %}
 {% load static %}
 
 <!DOCTYPE html>
@@ -39,9 +38,9 @@
 </head>
 
 <body>
-    
-					
-                    
+
+
+
     <!-- Start Main Top -->
     <header class="main-header">
         <!-- Start Navigation -->
@@ -49,10 +48,12 @@
             <div class="container">
                 <!-- Start Header Navigation -->
                 <div class="navbar-header">
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fa fa-bars"></i>
-                </button>
-                <a class="navbar-brand" href="index.html"><img src="{% static 'images/padlogo2.PNG' %}" style="width: 80px;" class="logo" alt=""></a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu"
+                        aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <a class="navbar-brand" href="index.html"><img src="{% static 'images/padlogo2.PNG' %}"
+                            style="width: 80px;" class="logo" alt=""></a>
                 </div>
                 <!-- End Header Navigation -->
 
@@ -63,34 +64,41 @@
                         {% if request.session.details %}
 
                         <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/index">Home</a></li>
-                        <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/v_register"> View User</a></li>
-                       <!-- <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/v_file">View Files</a></li> -->
+                        <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/v_register"> View
+                                User</a></li>
+                        <!-- <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/v_file">View Files</a></li> -->
                         <!-- <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/office">Add Officers</a></li> -->
                         <!-- <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/v_booking">View Booking</a></li> -->
-                        <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/logout">Logout</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/logout">Logout</a>
+                        </li>
 
                         {% elif request.session.uid %}
 
                         <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/index">Home</a></li>
-                        <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/files"> Paddy Leaf Disease</a></li>
-                        <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/files2">Mango Leaf Disease</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/files"> Paddy Leaf
+                                Disease</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/files2">Mango Leaf
+                                Disease</a></li>
 
                         <!-- <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/result">View Result</a></li> -->
-                        <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/logout">Logout</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/logout">Logout</a>
+                        </li>
 
 
                         {% else %}
 
                         <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/index">Home</a></li>
                         <!-- <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/recent_diseases">Recent Diseases</a></li> -->
-                        <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/register">Register</a></li>
-                        <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/login">Login</a></li>
+                        <li class="nav-item active"><a class="nav-link"
+                                href="http://127.0.0.1:8000/register">Register</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="http://127.0.0.1:8000/login">Login</a>
+                        </li>
                         {% endif %}
 
                     </ul>
                 </div>
-                
-               
+
+
             </div>
             <!-- Start Side Menu -->
             <div class="side">
@@ -98,17 +106,20 @@
                 <li class="cart-box">
                     <ul class="cart-list">
                         <li>
-                            <a href="#" class="photo"><img src="{% static 'images/img-pro-01.jpg' %}" class="cart-thumb" alt="" /></a>
+                            <a href="#" class="photo"><img src="{% static 'images/img-pro-01.jpg' %}" class="cart-thumb"
+                                    alt="" /></a>
                             <h6><a href="#">Delica omtantur </a></h6>
                             <p>1x - <span class="price">$80.00</span></p>
                         </li>
                         <li>
-                            <a href="#" class="photo"><img src="{% static 'images/img-pro-02.jpg' %}" class="cart-thumb" alt="" /></a>
+                            <a href="#" class="photo"><img src="{% static 'images/img-pro-02.jpg' %}" class="cart-thumb"
+                                    alt="" /></a>
                             <h6><a href="#">Omnes ocurreret</a></h6>
                             <p>1x - <span class="price">$60.00</span></p>
                         </li>
                         <li>
-                            <a href="#" class="photo"><img src="{% static 'images/img-pro-03.jpg' %}" class="cart-thumb" alt="" /></a>
+                            <a href="#" class="photo"><img src="{% static 'images/img-pro-03.jpg' %}" class="cart-thumb"
+                                    alt="" /></a>
                             <h6><a href="#">Agam facilisis</a></h6>
                             <p>1x - <span class="price">$40.00</span></p>
                         </li>
@@ -124,4 +135,3 @@
         <!-- End Navigation -->
     </header>
     <!-- End Main Top -->
-    {% endblock %}

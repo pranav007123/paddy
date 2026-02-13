@@ -1,58 +1,71 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Shopping Cart - Plant Health System{% endblock %}
+{% block title %}Shopping Cart - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4"><i class="fas fa-shopping-cart me-2"></i>Shopping Cart</h2>
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <span class="section-tag">Checkout Process</span>
+            <h2 class="section-title"><i class="fas fa-shopping-cart me-2"></i>My Shopping Cart</h2>
+        </div>
+    </div>
 
     {% if cart_items %}
     <div class="row">
-        <div class="col-md-8">
-            <div class="card mb-4 shadow-sm border-0">
+        <!-- Cart Items -->
+        <div class="col-lg-8">
+            <div class="feature-card p-0 overflow-hidden mb-4">
                 <div class="table-responsive">
                     <table class="table align-middle mb-0">
-                        <thead class="table-light text-center">
+                        <thead class="bg-light">
                             <tr>
-                                <th>Plant</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                                <th>Actions</th>
+                                <th class="ps-4 py-3">Selection</th>
+                                <th class="text-center py-3">Price</th>
+                                <th class="text-center py-3">Quantity</th>
+                                <th class="text-center py-3">Subtotal</th>
+                                <th class="pe-4 py-3 text-end">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for item in cart_items %}
-                            <tr id="row-{{ item.id }}">
-                                <td>
+                            <tr id="row-{{ item.id }}" class="border-bottom">
+                                <td class="ps-4 py-4">
                                     <div class="d-flex align-items-center">
                                         {% if item.plant.image %}
-                                        <img src="{{ item.plant.image.url }}" alt="{{ item.plant.name }}" width="50"
-                                            height="50" class="rounded me-2" style="object-fit: cover;">
+                                        <img src="{{ item.plant.image.url }}" alt="{{ item.plant.name }}" width="60"
+                                            height="60" class="rounded-3 me-3" style="object-fit: cover;">
                                         {% else %}
-                                        <img src="https://via.placeholder.com/50" alt="{{ item.plant.name }}" width="50"
-                                            height="50" class="rounded me-2">
+                                        <img src="https://via.placeholder.com/60" alt="{{ item.plant.name }}" width="60"
+                                            height="60" class="rounded-3 me-3">
                                         {% endif %}
-                                        <span>{{ item.plant.name }}</span>
+                                        <div>
+                                            <h6 class="font-weight-bold mb-0">{{ item.plant.name }}</h6>
+                                            <span class="text-muted small">{{ item.plant.category.name }}</span>
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="text-center">₹{{ item.plant.price }}</td>
                                 <td class="text-center">
-                                    <div class="input-group input-group-sm mx-auto" style="width: 100px;">
-                                        <button class="btn btn-outline-secondary"
+                                    <div class="input-group input-group-sm mx-auto shadow-sm" style="width: 110px;">
+                                        <button class="btn btn-outline-secondary border-0" style="background: #f8f9fa;"
                                             onclick="changeQuantity({{ item.id }}, -1)">-</button>
                                         <input type="number" id="qty-{{ item.id }}" value="{{ item.quantity }}" min="1"
-                                            max="{{ item.plant.stock }}" class="form-control text-center"
+                                            max="{{ item.plant.stock }}" class="form-control text-center border-0"
+                                            style="background: #fff; font-weight: 600;"
                                             onchange="updateCart({{ item.id }})">
-                                        <button class="btn btn-outline-secondary"
+                                        <button class="btn btn-outline-secondary border-0" style="background: #f8f9fa;"
                                             onclick="changeQuantity({{ item.id }}, 1)">+</button>
                                     </div>
                                 </td>
-                                <td class="text-center fw-bold">₹<span id="item-total-{{ item.id }}">{{
-                                        item.item_total|floatformat:2 }}</span></td>
-                                <td class="text-center">
-                                    <a href="{% url 'remove_from_cart' item.id %}" class="text-danger"><i
-                                            class="fas fa-trash-alt"></i></a>
+                                <td class="text-center font-weight-bold text-primary">₹<span
+                                        id="item-total-{{ item.id }}">{{ item.item_total|floatformat:2 }}</span></td>
+                                <td class="pe-4 py-4 text-end">
+                                    <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-sm btn-outline-danger"
+                                        style="border-radius: 8px;">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -60,42 +73,67 @@
                     </table>
                 </div>
             </div>
+
+            <a href="{% url 'view_categories_plants' %}" class="btn btn-premium btn-premium-outline"
+                style="color: var(--primary) !important; border-color: var(--primary);">
+                <i class="fas fa-arrow-left"></i> Continue Shopping
+            </a>
         </div>
-        <div class="col-md-4">
-            <div class="card p-3 shadow-sm border-0 sticky-top" style="top: 100px;">
-                <h5 class="mb-3">Order Summary</h5>
-                <div class="d-flex justify-content-between mb-2">
-                    <span>Total Items:</span>
-                    <span class="fw-bold">{{ cart_items|length }}</span>
-                </div>
-                <hr>
-                <div class="d-flex justify-content-between mb-2">
-                    <span>Subtotal:</span>
-                    <span class="fw-bold">₹<span id="subtotal">{{ subtotal|floatformat:2 }}</span></span>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                    <span>Tax (5%):</span>
-                    <span class="fw-bold">₹<span id="tax">{{ tax|floatformat:2 }}</span></span>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                    <span>Delivery:</span>
-                    <span class="fw-bold">₹<span id="delivery">{{ delivery_charge|floatformat:2 }}</span></span>
-                </div>
-                <hr>
+
+        <!-- Summary -->
+        <div class="col-lg-4">
+            <div class="feature-card p-4 sticky-top" style="top: 100px;">
+                <h4 class="font-weight-bold mb-4">Order Summary</h4>
+
                 <div class="d-flex justify-content-between mb-3">
-                    <span class="h5">Total:</span>
-                    <span class="h5 text-success">₹<span id="grad-total">{{ total_price|floatformat:2 }}</span></span>
+                    <span class="text-muted">Total Items</span>
+                    <span class="font-weight-bold">{{ cart_items|length }}</span>
                 </div>
-                <a href="{% url 'checkout' %}" class="btn btn-success w-100 py-2 fw-bold">Proceed to Checkout</a>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted">Subtotal</span>
+                    <span class="font-weight-bold">₹<span id="subtotal">{{ subtotal|floatformat:2 }}</span></span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted">Tax (5%)</span>
+                    <span class="font-weight-bold">₹<span id="tax">{{ tax|floatformat:2 }}</span></span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-4">
+                    <span class="text-muted">Delivery</span>
+                    <span class="font-weight-bold text-success">₹<span id="delivery">{{ delivery_charge|floatformat:2 }}</span></span>
+                </div>
+
+                <hr class="mb-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <span class="h5 font-weight-bold mb-0">Total</span>
+                    <span class="h3 font-weight-bold text-primary mb-0">₹<span id="grad-total">{{ total_price|floatformat:2 }}</span></span>
+                </div>
+
+                <a href="{% url 'checkout' %}" class="btn btn-premium btn-premium-primary w-100 py-3">
+                    Secure Checkout <i class="fas fa-lock ms-2"></i>
+                </a>
+
+                <div class="text-center mt-3">
+                    <img src="https://help.razorpay.com/house_rules/razorpay_logo.png" alt="Razorpay" height="20"
+                        class="opacity-50">
+                </div>
             </div>
         </div>
     </div>
     {% else %}
-    <div class="text-center py-5">
-        <i class="fas fa-shopping-basket fa-4x text-muted mb-3"></i>
-        <h3>Your cart is empty</h3>
-        <p class="text-muted mb-4">Looks like you haven't added any plants yet.</p>
-        <a href="{% url 'view_categories_plants' %}" class="btn btn-success px-5">Browse Plants</a>
+    <div class="col-12 text-center py-5">
+        <div class="hero-glass-card d-inline-block px-5 py-5"
+            style="background: rgba(5, 150, 105, 0.05); border: 1px solid rgba(5, 150, 105, 0.1);">
+            <i class="fas fa-shopping-basket fa-5x text-success mb-4 opacity-50"></i>
+            <h3 class="text-secondary">Your cart is empty</h3>
+            <p class="text-muted mb-4">Looks like you haven't added any premium plants to your collection yet.</p>
+            <a href="{% url 'view_categories_plants' %}" class="btn btn-premium btn-premium-primary">
+                Explore Our Collection
+            </a>
+        </div>
     </div>
     {% endif %}
 </div>

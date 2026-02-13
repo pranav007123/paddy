@@ -1,71 +1,133 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Edit Plant - Plant Health System{% endblock %}
+{% block title %}Asset Modification - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row mt-5 justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="fas fa-edit me-2"></i>Edit Plant: {{ plant.name }}</h5>
-                </div>
-                <div class="card-body">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <!-- Render errors if any -->
-                        {% if form.errors %}
-                        <div class="alert alert-danger">
-                            {{ form.errors }}
-                        </div>
-                        {% endif %}
+<div class="container py-5">
+    <div class="row mb-5 text-center">
+        <div class="col-12">
+            <span class="section-tag">Inventory Control</span>
+            <h2 class="section-title mb-0"><i class="fas fa-edit me-2 text-primary"></i>Modify Catalog Asset</h2>
+        </div>
+    </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.name.id_for_label }}" class="form-label">Plant Name</label>
-                                {{ form.name }}
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.category.id_for_label }}" class="form-label">Category</label>
-                                {{ form.category }}
-                            </div>
-                        </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="feature-card p-4 p-md-5">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.price.id_for_label }}" class="form-label">Price</label>
-                                {{ form.price }}
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.stock.id_for_label }}" class="form-label">Stock</label>
-                                {{ form.stock }}
-                            </div>
-                        </div>
+                    {% if form.errors %}
+                    <div class="alert alert-danger mb-4 shadow-sm" style="border-radius: 12px;">
+                        <i class="fas fa-exclamation-triangle me-2"></i><strong>Validation Error:</strong> Please check
+                        the fields highlighted below.
+                        <div class="small mt-2">{{ form.errors }}</div>
+                    </div>
+                    {% endif %}
 
-                        <div class="mb-3">
-                            <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
-                            {{ form.description }}
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <label for="{{ form.name.id_for_label }}"
+                                class="form-label small text-muted text-uppercase font-weight-bold">Descriptor
+                                Title</label>
+                            {{ form.name }}
                         </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.category.id_for_label }}"
+                                class="form-label small text-muted text-uppercase font-weight-bold">Asset
+                                Classification</label>
+                            {{ form.category }}
+                        </div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="{{ form.image.id_for_label }}" class="form-label">Image</label>
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <label for="{{ form.price.id_for_label }}"
+                                class="form-label small text-muted text-uppercase font-weight-bold">Unit Valuation
+                                (₹)</label>
+                            {{ form.price }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.stock.id_for_label }}"
+                                class="form-label small text-muted text-uppercase font-weight-bold">Inventory
+                                Quantity</label>
+                            {{ form.stock }}
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="{{ form.description.id_for_label }}"
+                            class="form-label small text-muted text-uppercase font-weight-bold">Operational
+                            Description</label>
+                        {{ form.description }}
+                    </div>
+
+                    <div class="mb-5">
+                        <label for="{{ form.image.id_for_label }}"
+                            class="form-label small text-muted text-uppercase font-weight-bold">Visual Asset</label>
+                        <div class="p-4 rounded-3 border-2 border-dashed bg-light mb-2 text-center"
+                            style="border: 2px dashed #cbd5e1;">
                             {% if plant.image %}
-                            <div class="mb-2">
-                                <img src="{{ plant.image.url }}" alt="Current Image" width="100" class="rounded">
-                                <small class="text-muted d-block">Current Image</small>
+                            <div class="mb-3">
+                                <img src="{{ plant.image.url }}" alt="Current Image" width="120"
+                                    class="rounded-3 shadow-sm" style="object-fit: cover; height: 120px;">
+                                <div class="mt-2 small text-primary font-weight-bold">Current Profile Image</div>
+                            </div>
+                            {% else %}
+                            <div class="mb-3 text-muted">
+                                <i class="fas fa-image fa-3x opacity-25"></i>
                             </div>
                             {% endif %}
-                            {{ form.image }}
+                            <div class="custom-file-upload">
+                                {{ form.image }}
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="d-flex justify-content-between align-items-center">
-                            <a href="{% url 'plant_management' %}" class="btn btn-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Update Plant</button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn btn-premium btn-premium-primary px-5 py-3 flex-grow-1">
+                            <i class="fas fa-save me-2"></i>Synchronize Changes
+                        </button>
+                        <a href="{% url 'plant_management' %}" class="btn btn-premium btn-premium-outline px-5 py-3">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    input,
+    select,
+    textarea {
+        display: block;
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #1e293b;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #e2e8f0;
+        appearance: none;
+        border-radius: 12px;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: var(--primary);
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.1);
+    }
+
+    .gap-3 {
+        gap: 1rem;
+    }
+</style>
 {% endblock %}

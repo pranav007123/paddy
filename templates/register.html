@@ -1,61 +1,87 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Account Provisioning - Agricultural Intelligence{% endblock %}
+
 {% block content %}
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h2 class="text-center mb-4">Create Account</h2>
-
-                    {% if message %}
-                    <div class="alert alert-info" role="alert">
-                        {{message}}
+        <div class="col-lg-8 col-md-10 px-4">
+            <div class="feature-card p-4 p-md-5 shadow-lg border-0"
+                style="border-radius: 25px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);">
+                <div class="text-center mb-5">
+                    <div class="stat-icon mx-auto mb-4"
+                        style="background: rgba(5, 150, 105, 0.1); width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-user-plus text-primary fa-3x"></i>
                     </div>
-                    {% endif %}
-
-                    <form method="POST" action="addreg" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label>Full Name</label>
-                                <input type="text" class="form-control" name="name" placeholder="Full Name" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label>Phone Number</label>
-                                <input type="text" class="form-control" name="phone_number" placeholder="Phone"
-                                    pattern="\d{10}" maxlength="10" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label>Email Address</label>
-                            <input type="email" class="form-control" name="email" placeholder="Email" required>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <label>Password</label>
-                                <input type="password" class="form-control" name="password" placeholder="Password"
-                                    required>
-                            </div>
-                            <div class="col-md-6 mb-4">
-                                <label>Confirm Password</label>
-                                <input type="password" class="form-control" name="confirm_password"
-                                    placeholder="Confirm Password" required>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-block">REGISTER</button>
-
-                        <div class="text-center mt-3">
-                            <p>Already have an account? <a href="/login" class="text-success">Login here</a></p>
-                        </div>
-                    </form>
+                    <h2 class="font-weight-bold mb-2">Account Provisioning</h2>
+                    <p class="text-muted small">Initialize your operator profile to access the botanical intelligence
+                        network.</p>
                 </div>
+
+                <form method="POST" action="addreg" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted text-uppercase font-weight-bold">Operator Full
+                                Name</label>
+                            <input type="text" class="form-control bg-light border-0 py-3" name="name"
+                                placeholder="John Doe" required style="border-radius: 12px;">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted text-uppercase font-weight-bold">Primary Contact
+                                No.</label>
+                            <input type="text" class="form-control bg-light border-0 py-3" name="phone_number"
+                                placeholder="10-digit mobile" pattern="\d{10}" maxlength="10" required
+                                style="border-radius: 12px;">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small text-muted text-uppercase font-weight-bold">Communication
+                            Endpoint (Email)</label>
+                        <input type="email" class="form-control bg-light border-0 py-3" name="email"
+                            placeholder="email@node.agri" required style="border-radius: 12px;">
+                    </div>
+
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted text-uppercase font-weight-bold">Security
+                                Passphrase</label>
+                            <input type="password" class="form-control bg-light border-0 py-3" name="password"
+                                placeholder="••••••••" required style="border-radius: 12px;">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted text-uppercase font-weight-bold">Verify
+                                Passphrase</label>
+                            <input type="password" class="form-control bg-light border-0 py-3" name="confirm_password"
+                                placeholder="••••••••" required style="border-radius: 12px;">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-premium btn-premium-primary w-100 py-3 shadow-sm mb-4">
+                        <i class="fas fa-check-circle me-2"></i>Execute Provisioning
+                    </button>
+
+                    <div class="text-center">
+                        <p class="small text-muted mb-0">Existing Operator? <a href="/login"
+                                class="text-primary font-weight-bold text-decoration-none">Synchronize Access</a></p>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        min-height: 100vh;
+    }
+
+    .form-control:focus {
+        background-color: #fff !important;
+        box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.1) !important;
+    }
+</style>
 {% endblock %}

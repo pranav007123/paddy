@@ -1,171 +1,175 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}User Dashboard - Plant Health System{% endblock %}
+{% block title %}Consumer Intelligence Center - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container py-5">
+    <!-- Welcome Header -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <span class="section-tag">User Ecosystem</span>
+            <h2 class="section-title mb-0"><i class="fas fa-tachometer-alt me-2 text-primary"></i>Operational Dashboard
+            </h2>
+            <p class="text-muted mt-2">Welcome back, {{ user.username }}. Here is your agricultural oversight.</p>
+        </div>
+    </div>
+
+    <!-- Analytics Tokens -->
+    <div class="row mb-5">
+        <div class="col-md-3 mb-4 mb-md-0">
+            <div class="feature-card p-4 text-center h-100 shadow-sm border-bottom border-primary border-4">
+                <div class="stat-icon mb-3 mx-auto shadow-sm"
+                    style="background: rgba(5, 150, 105, 0.1); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-store text-primary fa-xl"></i>
+                </div>
+                <h3 class="font-weight-bold mb-1">{{ shops.count }}</h3>
+                <p class="text-muted small text-uppercase font-weight-bold mb-0">Active Merchants</p>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4 mb-md-0">
+            <div class="feature-card p-4 text-center h-100 shadow-sm border-bottom border-indigo border-4">
+                <div class="stat-icon mb-3 mx-auto shadow-sm"
+                    style="background: rgba(79, 70, 229, 0.1); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-seedling text-indigo fa-xl"></i>
+                </div>
+                <h3 class="font-weight-bold mb-1">{{ plants.count }}</h3>
+                <p class="text-muted small text-uppercase font-weight-bold mb-0">Catalog Assets</p>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4 mb-md-0">
+            <div class="feature-card p-4 text-center h-100 shadow-sm border-bottom border-warning border-4">
+                <div class="stat-icon mb-3 mx-auto shadow-sm"
+                    style="background: rgba(245, 158, 11, 0.1); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-tags text-warning fa-xl"></i>
+                </div>
+                <h3 class="font-weight-bold mb-1">{{ categories.count }}</h3>
+                <p class="text-muted small text-uppercase font-weight-bold mb-0">Taxonomy Groups</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-card p-4 text-center h-100 shadow-sm border-bottom border-emerald border-4">
+                <div class="stat-icon mb-3 mx-auto shadow-sm"
+                    style="background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-shopping-cart text-emerald fa-xl"></i>
+                </div>
+                <h3 class="font-weight-bold mb-1 text-emerald">{{ cart_items_count }}</h3>
+                <p class="text-muted small text-uppercase font-weight-bold mb-0">Procurement Items</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discovery Sections -->
     <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-3 bg-light sidebar">
-            <div class="p-3">
-                <h4><i class="fas fa-user me-2"></i>{{ user.username }}</h4>
-                <hr>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'user_dashboard' %}"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'user_profile' %}"><i class="fas fa-user-circle me-2"></i>Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'view_shops_user' %}"><i class="fas fa-store me-2"></i>Shops</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'view_categories_plants' %}"><i class="fas fa-seedling me-2"></i>Plants</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'view_cart' %}"><i class="fas fa-shopping-cart me-2"></i>Cart</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'view_previous_orders' %}"><i class="fas fa-history me-2"></i>Orders</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'send_complaint' %}"><i class="fas fa-comment me-2"></i>Complaints</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'send_app_review' %}"><i class="fas fa-star me-2"></i>Reviews</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'change_password_user' %}"><i class="fas fa-key me-2"></i>Change Password</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
-                    </li>
-                </ul>
+        <!-- Popular Plants -->
+        <div class="col-lg-12 mb-5">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <span class="section-tag">Featured Catalog</span>
+                    <h4 class="font-weight-bold mb-0">Trending Botanical Assets</h4>
+                </div>
+                <a href="{% url 'view_categories_plants' %}" class="btn btn-premium btn-premium-outline btn-sm">Explorer
+                    Registry</a>
+            </div>
+            <div class="row">
+                {% for plant in plants|slice:":4" %}
+                <div class="col-md-3 mb-4">
+                    <div class="feature-card p-0 overflow-hidden h-100 transition-up">
+                        <img src="{{ plant.image.url|default:'https://via.placeholder.com/300x200' }}" class="w-100"
+                            alt="{{ plant.name }}" style="height: 180px; object-fit: cover;">
+                        <div class="p-3">
+                            <span class="badge bg-light text-primary mb-2" style="font-size: 0.65rem;">{{
+                                plant.category.name|upper }}</span>
+                            <h6 class="font-weight-bold mb-1">{{ plant.name|truncatechars:20 }}</h6>
+                            <p class="text-muted small mb-3">{{ plant.description|truncatewords:8 }}</p>
+                            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                <span class="font-weight-bold text-dark">₹{{ plant.price }}</span>
+                                <a href="{% url 'view_categories_plants' %}"
+                                    class="btn btn-premium btn-premium-primary btn-sm px-3">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <p class="text-muted">No catalog assets currently indexed.</p>
+                </div>
+                {% endfor %}
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="col-md-9">
-            <h2><i class="fas fa-tachometer-alt me-2"></i>User Dashboard</h2>
-            <hr>
-
-            <!-- Stats Cards -->
-            <div class="row mb-4">
-                <div class="col-md-3 mb-3">
-                    <div class="card user-card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-store fa-2x text-success mb-2"></i>
-                            <h5>{{ shops.count }}</h5>
-                            <p class="text-muted">Available Shops</p>
-                        </div>
-                    </div>
+        <!-- Popular Shops -->
+        <div class="col-lg-12">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <span class="section-tag">Partner Network</span>
+                    <h4 class="font-weight-bold mb-0">Top-Tier Merchants</h4>
                 </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card user-card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-seedling fa-2x text-primary mb-2"></i>
-                            <h5>{{ plants.count }}</h5>
-                            <p class="text-muted">Available Plants</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card user-card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-tags fa-2x text-warning mb-2"></i>
-                            <h5>{{ categories.count }}</h5>
-                            <p class="text-muted">Categories</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card user-card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-shopping-cart fa-2x text-info mb-2"></i>
-                            <h5>{{ cart_items_count }}</h5>
-                            <p class="text-muted">Items in Cart</p>
-                        </div>
-                    </div>
-                </div>
+                <a href="{% url 'view_shops_user' %}" class="btn btn-premium btn-premium-outline btn-sm">Global
+                    Directory</a>
             </div>
-
-            <!-- Popular Plants -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5><i class="fas fa-seedling me-2"></i>Popular Plants</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        {% for plant in plants|slice:":4" %}
-                        <div class="col-md-3 mb-3">
-                            <div class="card plant-card h-100">
-                                <img src="{{ plant.image.url|default:'https://via.placeholder.com/300x200' }}" class="card-img-top" alt="{{ plant.name }}">
-                                <div class="card-body">
-                                    <h6 class="card-title">{{ plant.name|truncatechars:20 }}</h6>
-                                    <p class="card-text small">{{ plant.description|truncatewords:10 }}</p>
-                                    <p class="card-text"><i class="fas fa-store text-success me-1"></i>{{ plant.shop.shop_name|truncatechars:15 }}</p>
-                                    <p class="card-text"><strong>₹{{ plant.price }}</strong></p>
-                                    <a href="{% url 'view_categories_plants' %}" class="btn btn-success btn-sm">View Details</a>
-                                </div>
+            <div class="row">
+                {% for shop in shops|slice:":4" %}
+                <div class="col-md-3 mb-4">
+                    <div class="feature-card p-4 h-100 transition-up">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="p-3 rounded-circle bg-light me-3">
+                                <i class="fas fa-store text-primary"></i>
+                            </div>
+                            <div>
+                                <h6 class="font-weight-bold mb-0">{{ shop.shop_name|truncatechars:15 }}</h6>
+                                <small class="text-muted">{{ shop.address|truncatewords:2 }}</small>
                             </div>
                         </div>
-                        {% empty %}
-                        <div class="col-12 text-center">
-                            <p class="text-muted">No plants available yet.</p>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
+                        <p class="text-muted small mb-3">{{ shop.description|truncatewords:10 }}</p>
 
-            <!-- Popular Shops -->
-            <div class="card">
-                <div class="card-header">
-                    <h5><i class="fas fa-store me-2"></i>Popular Shops</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        {% for shop in shops|slice:":4" %}
-                        <div class="col-md-3 mb-3">
-                            <div class="card h-100">
-                                <div class="card-img-top text-center p-3 bg-light">
-                                    <i class="fas fa-store fa-3x text-success"></i>
-                                </div>
-                                <div class="card-body">
-                                    <h6 class="card-title">{{ shop.shop_name|truncatechars:20 }}</h6>
-                                    <p class="card-text small">{{ shop.description|truncatewords:8 }}</p>
-                                    <p class="card-text"><i class="fas fa-map-marker-alt text-success me-1"></i>{{ shop.address|truncatewords:3 }}</p>
-                                    <p class="card-text"><i class="fas fa-phone text-primary me-1"></i>{{ shop.contact_number|default:"N/A" }}</p>
-                                    
-                                    <!-- Show a preview of plants from this shop -->
-                                    {% with shop.plants.all|slice:":2" as shop_plants %}
-                                    {% if shop_plants %}
-                                    <div class="mt-2">
-                                        <small class="text-muted">Featured Plants:</small>
-                                        {% for plant in shop_plants %}
-                                        <div class="d-flex justify-content-between align-items-center mt-1">
-                                            <span class="small">{{ plant.name|truncatechars:12 }}</span>
-                                            <span class="small text-success">₹{{ plant.price }}</span>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                    {% endif %}
-                                    {% endwith %}
-                                    
-                                    <a href="{% url 'view_shops_user' %}" class="btn btn-outline-success btn-sm mt-2">Visit Shop</a>
-                                </div>
+                        {% with shop.plants.all|slice:":2" as shop_plants %}
+                        {% if shop_plants %}
+                        <div class="bg-light p-2 rounded-3 mb-3">
+                            {% for plant in shop_plants %}
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="small text-dark">{{ plant.name|truncatechars:12 }}</span>
+                                <span class="small font-weight-bold text-primary">₹{{ plant.price }}</span>
                             </div>
+                            {% endfor %}
                         </div>
-                        {% empty %}
-                        <div class="col-12 text-center">
-                            <p class="text-muted">No shops available yet.</p>
-                        </div>
-                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+
+                        <a href="{% url 'view_shops_user' %}"
+                            class="btn btn-premium btn-premium-primary w-100 btn-sm">Access Storefront</a>
                     </div>
                 </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <p class="text-muted">No merchant nodes active in the network.</p>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .transition-up:hover {
+        transform: translateY(-5px);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .text-emerald {
+        color: #10b981 !important;
+    }
+
+    .border-emerald {
+        border-color: #10b981 !important;
+    }
+
+    .text-indigo {
+        color: #4f46e5 !important;
+    }
+
+    .border-indigo {
+        border-color: #4f46e5 !important;
+    }
+</style>
 {% endblock %}

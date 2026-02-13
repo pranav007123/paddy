@@ -1,145 +1,183 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Manage Shops - Admin Panel{% endblock %}
+{% block title %}Shop Moderation - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <!-- Sidebar -->
-        {% include 'shop/includes/admin_sidebar.html' %}
+<div class="container py-5">
+    <div class="row mb-5 align-items-center">
+        <div class="col-md-6">
+            <span class="section-tag">Governance</span>
+            <h2 class="section-title mb-0"><i class="fas fa-store me-2 text-primary"></i>Marketplace Moderation</h2>
+        </div>
+        <div class="col-md-6 mt-4 mt-md-0">
+            <form class="d-flex shadow-sm rounded-pill bg-white p-1" method="GET" action="{% url 'view_shops' %}"
+                style="border: 1px solid #e2e8f0;">
+                <input class="form-control border-0 bg-transparent ps-4" type="search" name="q"
+                    placeholder="Search by shop or owner name..." value="{{ search_query|default:'' }}"
+                    aria-label="Search" style="box-shadow: none;">
+                <button class="btn btn-premium btn-premium-primary rounded-pill px-4" type="submit">
+                    <i class="fas fa-search me-1"></i> Search
+                </button>
+                {% if search_query %}
+                <a href="{% url 'view_shops' %}" class="btn btn-link text-muted pe-3 align-self-center">
+                    <i class="fas fa-times"></i>
+                </a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
 
-        <!-- Main Content -->
-        <div class="col-md-9">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2><i class="fas fa-store me-2"></i>Manage Shops</h2>
-                <form class="d-flex" method="GET" action="{% url 'view_shops' %}">
-                    <input class="form-control me-2" type="search" name="q" placeholder="Search shops..."
-                        value="{{ search_query|default:'' }}" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                    {% if search_query %}
-                    <a href="{% url 'view_shops' %}" class="btn btn-outline-secondary ms-2">Clear</a>
-                    {% endif %}
-                </form>
-            </div>
-            <hr>
-
-            <!-- Pending Shops -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5><i class="fas fa-clock me-2"></i>Pending Shops</h5>
+    <!-- Pending Shops -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="feature-card p-0 overflow-hidden" style="border-left: 4px solid var(--warning);">
+                <div class="p-4 border-bottom bg-light-warning d-flex justify-content-between align-items-center"
+                    style="background: rgba(245, 158, 11, 0.05);">
+                    <h5 class="font-weight-bold mb-0 text-warning-emphasis"><i class="fas fa-clock me-2"></i>Pending
+                        Verification ({{ pending_shops|length }})</h5>
                 </div>
-                <div class="card-body">
-                    {% if pending_shops %}
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Shop Name</th>
-                                    <th>Owner</th>
-                                    <th>Email</th>
-                                    <th>Address</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for shop in pending_shops %}
-                                <tr>
-                                    <td>{{ shop.shop_name }}</td>
-                                    <td>{{ shop.user.username }}</td>
-                                    <td>{{ shop.email }}</td>
-                                    <td>{{ shop.address|truncatewords:5 }}</td>
-                                    <td>
+                {% if pending_shops %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light small">
+                            <tr>
+                                <th class="ps-4">Establishment</th>
+                                <th>Registry Holder</th>
+                                <th>Contact Information</th>
+                                <th class="pe-4 text-center">Executive Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            {% for shop in pending_shops %}
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="font-weight-bold h6 mb-0">{{ shop.shop_name }}</div>
+                                    <span class="text-muted small">{{ shop.address|truncatechars:40 }}</span>
+                                </td>
+                                <td>{{ shop.user.username }}</td>
+                                <td>{{ shop.email }}</td>
+                                <td class="pe-4 text-center">
+                                    <div class="d-flex justify-content-center gap-2">
                                         <a href="{% url 'approve_shop' shop.id %}"
-                                            class="btn btn-sm btn-success me-1">Approve</a>
+                                            class="btn btn-sm btn-emerald text-white px-3"
+                                            style="border-radius: 8px;">Verify</a>
                                         <a href="{% url 'reject_shop' shop.id %}"
-                                            class="btn btn-sm btn-danger">Reject</a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% else %}
-                    <p class="text-muted">No pending shops to review.</p>
-                    {% endif %}
+                                            class="btn btn-sm btn-outline-danger px-3"
+                                            style="border-radius: 8px;">Deny</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
+                {% else %}
+                <div class="p-5 text-center text-muted">
+                    <i class="fas fa-inbox fa-3x mb-3 opacity-25"></i>
+                    <p class="mb-0">No pending shop applications in the queue.</p>
+                </div>
+                {% endif %}
             </div>
+        </div>
+    </div>
 
-            <!-- Approved Shops -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5><i class="fas fa-check-circle me-2"></i>Approved Shops</h5>
+    <!-- Approved Shops -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="feature-card p-0 overflow-hidden">
+                <div class="p-4 border-bottom bg-light">
+                    <h5 class="font-weight-bold mb-0 text-primary"><i class="fas fa-check-circle me-2"></i>Active
+                        Marketplace Vendors</h5>
                 </div>
-                <div class="card-body">
-                    {% if approved_shops %}
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Shop Name</th>
-                                    <th>Owner</th>
-                                    <th>Email</th>
-                                    <th>Address</th>
-                                    <th>Created</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for shop in approved_shops %}
-                                <tr>
-                                    <td>{{ shop.shop_name }}</td>
-                                    <td>{{ shop.user.username }}</td>
-                                    <td>{{ shop.email }}</td>
-                                    <td>{{ shop.address|truncatewords:5 }}</td>
-                                    <td>{{ shop.created_at|date:"M d, Y" }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% else %}
-                    <p class="text-muted">No approved shops yet.</p>
-                    {% endif %}
+                {% if approved_shops %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light small">
+                            <tr>
+                                <th class="ps-4">Shop Name</th>
+                                <th>Registry Holder</th>
+                                <th>Primary Email</th>
+                                <th>Onboarding Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            {% for shop in approved_shops %}
+                            <tr>
+                                <td class="ps-4 font-weight-bold">{{ shop.shop_name }}</td>
+                                <td>{{ shop.user.username }}</td>
+                                <td>{{ shop.email }}</td>
+                                <td>{{ shop.created_at|date:"M d, Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
+                {% else %}
+                <div class="p-5 text-center text-muted">
+                    <p class="mb-0">Zero active vendors registered.</p>
+                </div>
+                {% endif %}
             </div>
+        </div>
+    </div>
 
-            <!-- Rejected Shops -->
-            <div class="card">
-                <div class="card-header">
-                    <h5><i class="fas fa-times-circle me-2"></i>Rejected Shops</h5>
+    <!-- Rejected Shops -->
+    <div class="row">
+        <div class="col-12">
+            <div class="feature-card p-0 overflow-hidden opacity-75">
+                <div class="p-4 border-bottom bg-light">
+                    <h5 class="font-weight-bold mb-0 text-secondary"><i
+                            class="fas fa-times-circle me-2"></i>Deactivated/Denied Registry</h5>
                 </div>
-                <div class="card-body">
-                    {% if rejected_shops %}
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Shop Name</th>
-                                    <th>Owner</th>
-                                    <th>Email</th>
-                                    <th>Address</th>
-                                    <th>Rejected</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for shop in rejected_shops %}
-                                <tr>
-                                    <td>{{ shop.shop_name }}</td>
-                                    <td>{{ shop.user.username }}</td>
-                                    <td>{{ shop.email }}</td>
-                                    <td>{{ shop.address|truncatewords:5 }}</td>
-                                    <td>{{ shop.updated_at|date:"M d, Y" }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% else %}
-                    <p class="text-muted">No rejected shops yet.</p>
-                    {% endif %}
+                {% if rejected_shops %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light small">
+                            <tr>
+                                <th class="ps-4">Shop Name</th>
+                                <th>Owner</th>
+                                <th>Email</th>
+                                <th>Denial Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            {% for shop in rejected_shops %}
+                            <tr>
+                                <td class="ps-4 text-muted">{{ shop.shop_name }}</td>
+                                <td class="text-muted">{{ shop.user.username }}</td>
+                                <td class="text-muted">{{ shop.email }}</td>
+                                <td class="text-muted">{{ shop.updated_at|date:"M d, Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
+                {% else %}
+                <div class="p-4 text-center text-muted">
+                    <p class="mb-0 small">Registry is clean.</p>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .btn-emerald {
+        background-color: var(--primary) !important;
+    }
+
+    .gap-2 {
+        gap: 0.5rem;
+    }
+
+    .bg-light-warning {
+        background-color: rgba(245, 158, 11, 0.05);
+    }
+
+    .text-warning-emphasis {
+        color: #854d0e !important;
+    }
+</style>
 {% endblock %}

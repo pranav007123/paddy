@@ -40,6 +40,7 @@ urlpatterns = [
     path('buy-now/<int:plant_id>/', views.buy_now_single, name='buy_now_single'),
     path('checkout/', views.checkout, name='checkout'),
     path('payment/verify/', views.verify_payment, name='verify_payment'),
+    path('product/<int:plant_id>/', views.product_detail, name='product_detail'),
     path('reviews/add/<int:plant_id>/', views.add_review, name='add_review'),
     path('orders/', views.user_orders, name='user_orders'),
     path('orders/receipt/<int:order_id>/', views.order_receipt, name='order_receipt'),

@@ -6,6 +6,7 @@ class user(models.Model):
     email=models.CharField(max_length=120)
     password=models.CharField(max_length=120)
     confirm_password=models.CharField(max_length=120)
+    profile_pic=models.ImageField(upload_to='profiles/', null=True, blank=True)
     is_superuser=models.BooleanField(default=False)
 
 class fileupload(models.Model):

@@ -375,6 +375,24 @@ def user_plant_list(request):
     return render(request, 'shop/user_view_categories_plants.html', context)
 
 @login_required_custom
+def product_detail(request, plant_id):
+    plant = get_object_or_404(Plant, id=plant_id)
+    reviews = Review.objects.filter(plant=plant).order_by('-created_at')
+    
+    # Calculate average rating
+    avg_rating = 0
+    if reviews.exists():
+        avg_rating = sum(r.rating for r in reviews) / reviews.count()
+    
+    context = {
+        'plant': plant,
+        'reviews': reviews,
+        'avg_rating': avg_rating,
+        'range_5': range(1, 6)
+    }
+    return render(request, 'shop/product_detail.html', context)
+
+@login_required_custom
 def add_to_cart(request, plant_id):
     current_user = get_current_user(request)
     plant = get_object_or_404(Plant, id=plant_id)

@@ -1,59 +1,96 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}User Profile - Plant Health System{% endblock %}
+{% block title %}Identity Context - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2><i class="fas fa-user-circle me-2"></i>User Profile</h2>
-    <hr>
+<div class="container py-5">
+    <div class="row mb-5 text-center">
+        <div class="col-12">
+            <span class="section-tag">Operator Profile</span>
+            <h2 class="section-title mb-0"><i class="fas fa-user-circle me-2 text-primary"></i>Personal Identification
+                Ledger</h2>
+        </div>
+    </div>
 
     <div class="row">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body text-center">
-                    <i class="fas fa-user-circle fa-5x text-success mb-3"></i>
-                    <h5>{{ user.username }}</h5>
-                    <p class="text-muted">{{ user.email }}</p>
-                    <p class="text-muted">Member since {{ user.date_joined|date:"M Y" }}</p>
+        <!-- Profile Card -->
+        <div class="col-lg-4 mb-4 mb-lg-0">
+            <div class="feature-card p-4 text-center">
+                <div class="bg-light rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center mb-4"
+                    style="width: 120px; height: 120px;">
+                    <i class="fas fa-user-circle text-primary fa-5x"></i>
+                </div>
+                <h4 class="font-weight-bold mb-1">{{ user.username }}</h4>
+                <p class="text-primary small font-weight-bold text-uppercase mb-3">{{ user.email }}</p>
+                <div class="py-3 px-4 bg-light rounded-pill d-inline-block small text-muted">
+                    <i class="fas fa-calendar-alt me-2"></i>Provisioned: {{ user.date_joined|date:"M Y" }}
                 </div>
             </div>
         </div>
 
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Edit Profile</h5>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="firstName" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="firstName" name="first_name" value="{{ user.first_name }}">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="lastName" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="lastName" name="last_name" value="{{ user.last_name }}">
-                            </div>
+        <!-- Edit Form -->
+        <div class="col-lg-8">
+            <div class="feature-card p-4 p-md-5">
+                <h5 class="font-weight-bold mb-4"><i class="fas fa-edit me-2 text-primary"></i>Synchronize Identity Data
+                </h5>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <label for="firstName"
+                                class="form-label small text-muted text-uppercase font-weight-bold">Primary Name</label>
+                            <input type="text" class="form-control" id="firstName" name="first_name"
+                                value="{{ user.first_name }}"
+                                style="border-radius: 12px; padding: 12px; border: 2px solid #f1f5f9;">
                         </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+                        <div class="col-md-6">
+                            <label for="lastName"
+                                class="form-label small text-muted text-uppercase font-weight-bold">Secondary
+                                Name</label>
+                            <input type="text" class="form-control" id="lastName" name="last_name"
+                                value="{{ user.last_name }}"
+                                style="border-radius: 12px; padding: 12px; border: 2px solid #f1f5f9;">
                         </div>
-                        <div class="mb-3">
-                            <label for="contactNumber" class="form-label">Contact Number</label>
-                            <input type="text" class="form-control" id="contactNumber" name="contact_number" value="{{ profile.contact_number }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="address" class="form-label">Address</label>
-                            <textarea class="form-control" id="address" name="address" rows="3">{{ profile.address }}</textarea>
-                        </div>
-                        <button type="submit" class="btn btn-success">Update Profile</button>
-                    </form>
-                </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="email"
+                            class="form-label small text-muted text-uppercase font-weight-bold">Communication Endpoint
+                            (Email)</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}"
+                            style="border-radius: 12px; padding: 12px; border: 2px solid #f1f5f9;">
+                    </div>
+                    <div class="mb-4">
+                        <label for="contactNumber"
+                            class="form-label small text-muted text-uppercase font-weight-bold">Telecommunications
+                            Ref</label>
+                        <input type="text" class="form-control" id="contactNumber" name="contact_number"
+                            value="{{ profile.contact_number }}"
+                            style="border-radius: 12px; padding: 12px; border: 2px solid #f1f5f9;">
+                    </div>
+                    <div class="mb-5">
+                        <label for="address"
+                            class="form-label small text-muted text-uppercase font-weight-bold">Physical
+                            Geolocation</label>
+                        <textarea class="form-control" id="address" name="address" rows="3"
+                            style="border-radius: 12px; padding: 12px; border: 2px solid #f1f5f9;">{{ profile.address }}</textarea>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn btn-premium btn-premium-primary px-5 py-3 flex-grow-1">
+                            <i class="fas fa-save me-2"></i>Synchronize Changes
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .form-control:focus {
+        border-color: var(--primary) !important;
+        box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.1) !important;
+    }
+</style>
 {% endblock %}

@@ -1,32 +1,71 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Login - Plant Health System{% endblock %}
+{% block title %}Identity Authentication - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-        <div class="card shadow">
-            <div class="card-header bg-success text-white text-center">
-                <h3><i class="fas fa-sign-in-alt me-2"></i>Login</h3>
-            </div>
-            <div class="card-body">
+<div class="container py-5">
+    <div class="row justify-content-center py-5">
+        <div class="col-md-6 col-lg-5">
+            <div class="feature-card p-4 p-md-5">
+                <div class="text-center mb-5">
+                    <div class="bg-light rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center mb-4"
+                        style="width: 80px; height: 80px;">
+                        <i class="fas fa-shield-alt text-primary fa-2x"></i>
+                    </div>
+                    <h2 class="font-weight-bold mb-2">Platform Access</h2>
+                    <p class="text-muted small text-uppercase font-weight-bold">System Credentials Required</p>
+                </div>
+
                 <form method="post">
                     {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
+                    <div class="mb-4">
+                        <label for="username"
+                            class="form-label small text-muted text-uppercase font-weight-bold">Operator Alias</label>
+                        <div class="input-group">
+                            <span class="input-group-text border-end-0 bg-transparent"
+                                style="border-radius: 12px 0 0 12px; border: 2px solid #f1f5f9; min-width: 46px; justify-content: center;">
+                                <i class="fas fa-user-circle text-muted"></i>
+                            </span>
+                            <input type="text" class="form-control border-start-0 ps-0" id="username" name="username"
+                                placeholder="Username" required
+                                style="border-radius: 0 12px 12px 0; border: 2px solid #f1f5f9; box-shadow: none; padding: 12px;">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
+                    <div class="mb-5">
+                        <label for="password"
+                            class="form-label small text-muted text-uppercase font-weight-bold">Security Token</label>
+                        <div class="input-group">
+                            <span class="input-group-text border-end-0 bg-transparent"
+                                style="border-radius: 12px 0 0 12px; border: 2px solid #f1f5f9; min-width: 46px; justify-content: center;">
+                                <i class="fas fa-key text-muted"></i>
+                            </span>
+                            <input type="password" class="form-control border-start-0 ps-0" id="password"
+                                name="password" placeholder="••••••••" required
+                                style="border-radius: 0 12px 12px 0; border: 2px solid #f1f5f9; box-shadow: none; padding: 12px;">
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-success w-100">Login</button>
+                    <button type="submit" class="btn btn-premium btn-premium-primary w-100 py-3 shadow-sm">
+                        <i class="fas fa-sign-in-alt me-2"></i>Authenticate Session
+                    </button>
                 </form>
-                <div class="text-center mt-3">
-                    <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+
+                <div class="text-center mt-5 pt-4 border-top">
+                    <p class="text-muted small">New Operator? <a href="{% url 'signup' %}"
+                            class="text-primary font-weight-bold">Request Access</a></p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .form-control:focus {
+        border-color: var(--primary) !important;
+    }
+
+    .input-group:focus-within .input-group-text {
+        border-color: var(--primary) !important;
+    }
+</style>
 {% endblock %}

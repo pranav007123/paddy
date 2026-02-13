@@ -1,51 +1,59 @@
-{% block content %}
+{% extends 'base.html' %}
 {% load static %}
-{% include 'header.html' %}
 
-<div class="contact-box-main">
+{% block content %}
+<div class="contact-box-main py-5">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-sm-12">
-                <div class="contact-form-right">
-                    <h2> View Registered Officers </h2>
-                    <div class="row">
-                    <table class="table table-bordered">
-                         <tr>
-                            <th>ID</th>
-                            <th>OFFICER NAME</th>
-                            <th>OFFICER ID</th>
-                            <th>DATE</th>
-                            <th>NAME</th>
-                            <th>STATUS</th>
-                            
-                            
-                         </tr>
-                        {% for i in result %}
-                           <tr>
-                              <td>{{forloop.counter}}</td>
-                              <td>{{i.officer_name}}</td>
-                              <td>{{i.officer_id}}</td>
-                              <td>{{i.date}}</td>
-                              <td>{{i.time}}</td>
-
-                                 {% if i.status == 'pending' %}
-                                  <td><a href="officer_accept/{{i.id}}">Accepted</a><br>
-                                    <a href="officer_reject/{{i.id}}">Rejected</a></td>
-
-                                  {% else %}
-                                  <td>{{i.status}}</td>
-                                  {% endif %}
-
-                            </tr>
-                           
-                        {% endfor %}
-                    </table>
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="feature-card shadow-lg p-4">
+                    <span class="section-tag">Appointment Management</span>
+                    <h2 class="mb-4">Consultation Bookings</h2>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>OFFICER NAME</th>
+                                    <th>OFFICER ID</th>
+                                    <th>DATE</th>
+                                    <th>TIME/NAME</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in result %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td class="font-weight-bold">{{i.officer_name}}</td>
+                                    <td><span class="badge badge-outline-secondary">#{{i.officer_id}}</span></td>
+                                    <td>{{i.date}}</td>
+                                    <td>{{i.time}}</td>
+                                    <td>
+                                        {% if i.status == 'pending' %}
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="/officer_accept/{{i.id}}" class="btn btn-success">
+                                                <i class="fas fa-check"></i> Accept
+                                            </a>
+                                            <a href="/officer_reject/{{i.id}}" class="btn btn-danger">
+                                                <i class="fas fa-times"></i> Reject
+                                            </a>
+                                        </div>
+                                        {% else %}
+                                        <span
+                                            class="badge {% if i.status == 'Accepted' %}badge-success{% else %}badge-danger{% endif %} text-uppercase p-2">
+                                            {{i.status}}
+                                        </span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
-                    
                 </div>
-            </div>              
+            </div>
+        </div>
     </div>
 </div>
-<!-- End Cart -->
-{% include 'footer.html' %}
 {% endblock %}

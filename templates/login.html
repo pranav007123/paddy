@@ -1,39 +1,80 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Operator Authentication - Agricultural Intelligence{% endblock %}
+
 {% block content %}
-<div class="container py-5">
+<div class="container py-5 mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h2 class="text-center mb-4">Login</h2>
-
-                    {% if message %}
-                    <div class="alert alert-danger" role="alert">
-                        {{message}}
+        <div class="col-lg-5 col-md-8 px-4">
+            <div class="feature-card p-4 p-md-5 shadow-lg border-0"
+                style="border-radius: 25px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);">
+                <div class="text-center mb-5">
+                    <div class="stat-icon mx-auto mb-4"
+                        style="background: rgba(5, 150, 105, 0.1); width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-fingerprint text-primary fa-3x"></i>
                     </div>
-                    {% endif %}
-
-                    <form method="POST" action="addlogin" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="form-group mb-3">
-                            <label>Email Address</label>
-                            <input type="text" class="form-control" name="email" placeholder="Email" required>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label>Password</label>
-                            <input type="password" class="form-control" name="password" placeholder="Password" required>
-                        </div>
-                        <button type="submit" class="btn btn-success btn-block">LOGIN</button>
-
-                        <div class="text-center mt-3">
-                            <p>Don't have an account? <a href="/register" class="text-success">Register here</a></p>
-                        </div>
-                    </form>
+                    <h2 class="font-weight-bold mb-2">System Access</h2>
+                    <p class="text-muted small">Enter your provisioned credentials to synchronize with the network.</p>
                 </div>
+
+                <form method="POST" action="addlogin" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label class="form-label small text-muted text-uppercase font-weight-bold">Authorization
+                            Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0" style="border-radius: 12px 0 0 12px;"><i
+                                    class="fas fa-envelope text-primary opacity-50"></i></span>
+                            <input type="email" class="form-control bg-light border-0 py-3" name="email"
+                                placeholder="email@node.agri" required style="border-radius: 0 12px 12px 0;">
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label small text-muted text-uppercase font-weight-bold">Security
+                            Passphrase</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0" style="border-radius: 12px 0 0 12px;"><i
+                                    class="fas fa-lock text-primary opacity-50"></i></span>
+                            <input type="password" class="form-control bg-light border-0 py-3" name="password"
+                                placeholder="••••••••" required style="border-radius: 0 12px 12px 0;">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-premium btn-premium-primary w-100 py-3 shadow-sm mb-4">
+                        <i class="fas fa-sign-in-alt me-2"></i>Initialize Connection
+                    </button>
+
+                    <div class="text-center">
+                        <p class="small text-muted mb-0">Unrecognized Operator? <a href="/register"
+                                class="text-primary font-weight-bold text-decoration-none">Provision Account</a></p>
+                    </div>
+                </form>
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="/index" class="text-muted small text-decoration-none opacity-50 hover-opacity-100">
+                    <i class="fas fa-arrow-left me-1"></i> Return to Infrastructure Overview
+                </a>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        min-height: 100vh;
+    }
+
+    .form-control:focus {
+        background-color: #fff !important;
+        box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.1) !important;
+    }
+
+    .hover-opacity-100:hover {
+        opacity: 1 !important;
+        transition: opacity 0.3s ease;
+    }
+</style>
 {% endblock %}

@@ -1,64 +1,92 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}App Review - Plant Health System{% endblock %}
+{% block title %}Eco-System Feedback - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <h2><i class="fas fa-star me-2"></i>Send App Review</h2>
-            <hr>
-
-            <form method="post">
-                {% csrf_token %}
-                <div class="mb-3">
-                    <label for="rating" class="form-label">Rating</label>
-                    <select class="form-control" id="rating" name="rating" required>
-                        <option value="">Select Rating</option>
-                        <option value="1">1 Star - Poor</option>
-                        <option value="2">2 Stars - Fair</option>
-                        <option value="3">3 Stars - Good</option>
-                        <option value="4">4 Stars - Very Good</option>
-                        <option value="5">5 Stars - Excellent</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="comment" class="form-label">Comment (Optional)</label>
-                    <textarea class="form-control" id="comment" name="comment" rows="4"></textarea>
-                </div>
-                <button type="submit" class="btn btn-success">Submit Review</button>
-            </form>
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <span class="section-tag">Quality Assurance</span>
+            <h2 class="section-title mb-0"><i class="fas fa-star me-2 text-primary"></i>Platform Experience Feedback
+            </h2>
+            <p class="text-muted mt-2">Scale our infrastructure performance based on your operational experience.</p>
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5><i class="fas fa-history me-2"></i>Previous Reviews</h5>
-                </div>
-                <div class="card-body">
-                    {% if reviews %}
-                        {% for review in reviews %}
-                        <div class="mb-3">
-                            <div class="d-flex">
+    </div>
+
+    <div class="row justify-content-center">
+        <!-- Review Form -->
+        <div class="col-lg-7">
+            <div class="feature-card p-4 p-md-5 mb-5 shadow-sm">
+                <h5 class="font-weight-bold mb-4">Metric Calibration</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="rating"
+                            class="form-label small text-muted text-uppercase font-weight-bold">Satisfaction
+                            Coefficient</label>
+                        <select class="form-control" id="rating" name="rating" required
+                            style="border-radius: 12px; padding: 12px; border: 2px solid #f1f5f9;">
+                            <option value="">Select Coefficient Level...</option>
+                            <option value="5">Tier 5 - Exceptional Infrastructure</option>
+                            <option value="4">Tier 4 - Reliable Performance</option>
+                            <option value="3">Tier 3 - Standard Operation</option>
+                            <option value="2">Tier 2 - Sub-Optimal Experience</option>
+                            <option value="1">Tier 1 - Critical Failure/Dissatisfaction</option>
+                        </select>
+                    </div>
+                    <div class="mb-5">
+                        <label for="comment"
+                            class="form-label small text-muted text-uppercase font-weight-bold">Narrative Analysis
+                            (Optional)</label>
+                        <textarea class="form-control" id="comment" name="comment" rows="4"
+                            placeholder="Synchronize your qualitative observations with our data center..."
+                            style="border-radius: 12px; padding: 12px; border: 2px solid #f1f5f9;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-premium btn-premium-primary w-100 py-3 shadow-sm">
+                        <i class="fas fa-cloud-upload-alt me-2"></i>Transmit Feedback Data
+                    </button>
+                </form>
+            </div>
+
+            <div class="feature-card p-4">
+                <h5 class="font-weight-bold mb-4 border-bottom pb-3"><i
+                        class="fas fa-history me-2 text-primary"></i>Archived Platform Metrics</h5>
+                {% if reviews %}
+                <div class="row">
+                    {% for review in reviews %}
+                    <div class="col-md-6 mb-3">
+                        <div class="p-3 bg-light rounded-3 h-100">
+                            <div class="d-flex mb-2">
                                 {% for i in "12345" %}
-                                    {% if i|add:0 <= review.rating %}
-                                        <i class="fas fa-star text-warning me-1"></i>
-                                    {% else %}
-                                        <i class="far fa-star text-warning me-1"></i>
-                                    {% endif %}
+                                <i
+                                    class="{% if forloop.counter <= review.rating %}fas{% else %}far{% endif %} fa-star text-warning me-1 small"></i>
                                 {% endfor %}
                             </div>
-                            <p class="small text-muted mb-1">Date: {{ review.created_at|date:"M d, Y" }}</p>
+                            <p class="small text-muted mb-1" style="font-size: 0.7rem;">Synchronized: {{
+                                review.created_at|date:"M d, Y" }}</p>
                             {% if review.comment %}
-                                <p class="small">{{ review.comment }}</p>
+                            <p class="small text-dark mb-0 italic" style="line-height: 1.4;">"{{
+                                review.comment|truncatechars:100 }}"</p>
                             {% endif %}
                         </div>
-                        {% endfor %}
-                    {% else %}
-                        <p class="text-muted">No reviews submitted yet.</p>
-                    {% endif %}
+                    </div>
+                    {% endfor %}
                 </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <p class="text-muted small mb-0">No historical data available for this operator.</p>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .form-control:focus {
+        border-color: var(--primary) !important;
+        box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.1) !important;
+    }
+</style>
 {% endblock %}

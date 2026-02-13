@@ -1,22 +1,41 @@
-﻿{% extends 'shop/shop_base.html' %}
+﻿{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Plants & Categories - Plant Health System{% endblock %}
+{% block title %}Plant Catalog - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2><i class="fas fa-seedling me-2"></i>Plants & Categories</h2>
-    <hr>
+<!-- Premium Hero for Catalog -->
+<section class="premium-hero" style="padding: 100px 0 60px; min-height: auto;">
+    <div class="container text-center">
+        <div class="hero-glass-card animate__animated animate__fadeInDown" style="padding: 30px;">
+            <span class="section-tag" style="color: #a7f3d0;">Seedling Marketplace</span>
+            <h1 class="hero-title" style="font-size: 2.5rem; margin-bottom: 10px;">Our Plant Collection</h1>
+            <p class="lead" style="color: rgba(255,255,255,0.85); font-size: 1.1rem;">Premium quality plants and
+                seedlings
+                curated for your farm.</p>
+        </div>
+    </div>
+</section>
 
-    <!-- Categories Filter -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h4>Filter by Category</h4>
-            <div class="d-flex flex-wrap gap-2">
+<!-- Main Catalog Content -->
+<div class="container py-5">
+    <!-- Categories Filter Chips -->
+    <div class="row mb-5 justify-content-center">
+        <div class="col-12 text-center">
+            <span class="section-tag">Market Categories</span>
+            <h3 class="mb-4">Filter by Specialty</h3>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
                 <a href="{% url 'view_categories_plants' %}"
-                    class="btn btn-outline-success {% if not request.GET.category %}active{% endif %}">All</a>
+                    class="btn btn-premium {% if not request.GET.category %}btn-premium-primary{% else %}btn-premium-outline{% endif %}"
+                    style="{% if request.GET.category %}color: var(--primary) !important; border-color: var(--primary);{% endif %}">
+                    All Species
+                </a>
                 {% for category in categories %}
                 <a href="?category={{ category.id }}"
-                    class="btn btn-outline-success {% if request.GET.category == category.id|stringformat:'s' %}active{% endif %}">{{ category.name }}</a>
+                    class="btn btn-premium {% if request.GET.category == category.id|stringformat:'s' %}btn-premium-primary{% else %}btn-premium-outline{% endif %}"
+                    style="{% if request.GET.category != category.id|stringformat:'s' %}color: var(--primary) !important; border-color: var(--primary);{% endif %}">
+                    {{ category.name }}
+                </a>
                 {% endfor %}
             </div>
         </div>
@@ -26,42 +45,64 @@
     <div class="row">
         {% for plant in plants %}
         {% if not request.GET.category or plant.category.id|stringformat:'s' == request.GET.category %}
-        <div class="col-md-3 mb-4">
-            <div class="card plant-card h-100">
-                {% if plant.image %}
-                <img src="{{ plant.image.url }}" class="card-img-top" alt="{{ plant.name }}">
-                {% else %}
-                <img src="https://via.placeholder.com/300x200?text=No+Image" class="card-img-top"
-                    alt="{{ plant.name }}">
-                {% endif %}
-                <div class="card-body">
-                    <h6 class="card-title">{{ plant.name }}</h6>
-                    <p class="card-text small">{{ plant.description|truncatewords:10 }}</p>
-                    <p class="card-text"><strong>₹{{ plant.price }}</strong></p>
-                    <p class="card-text"><small class="text-muted">Category: {{ plant.category.name }}</small></p>
-                    <p class="card-text"><small class="text-muted">Available: {{ plant.stock }} units</small></p>
+        <div class="col-lg-3 col-md-6 mb-4 animate__animated animate__fadeInUp">
+            <div class="feature-card h-100 p-0 overflow-hidden">
+                <div class="position-relative">
+                    <a href="{% url 'product_detail' plant.id %}">
+                        {% if plant.image %}
+                        <img src="{{ plant.image.url }}" class="w-100" style="height: 220px; object-fit: cover;"
+                            alt="{{ plant.name }}">
+                        {% else %}
+                        <img src="https://via.placeholder.com/300x200?text=No+Image" class="w-100"
+                            style="height: 220px; object-fit: cover;" alt="{{ plant.name }}">
+                        {% endif %}
+                    </a>
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge bg-success shadow-sm">{{ plant.category.name }}</span>
+                    </div>
                 </div>
-                <div class="card-footer">
-                    <form method="post" action="{% url 'add_to_cart' plant.id %}" class="d-flex">
-                        {% csrf_token %}
-                        <input type="number" name="quantity" value="1" min="1" max="{{ plant.stock }}"
-                            class="form-control me-2" style="width: 80px;">
-                        <button type="submit" class="btn btn-success btn-sm">Add to Cart</button>
-                    </form>
-                    <form method="post" action="{% url 'buy_now_single' plant.id %}" class="mt-2">
-                        {% csrf_token %}
-                        <input type="hidden" name="quantity" value="1">
-                        <button type="submit" class="btn btn-primary btn-sm w-100">Buy Now</button>
-                    </form>
+
+                <div class="p-4">
+                    <a href="{% url 'product_detail' plant.id %}" class="text-decoration-none">
+                        <h5 class="font-weight-bold mb-2 text-dark">{{ plant.name }}</h5>
+                    </a>
+                    <p class="text-muted small mb-3">{{ plant.description|truncatewords:8 }}</p>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="h4 text-primary font-weight-bold mb-0">₹{{ plant.price }}</span>
+                        <span class="badge outline-success text-muted"
+                            style="border: 1px solid #ddd; font-weight: 400;">{{ plant.stock }} left</span>
+                    </div>
+
+                    <div class="gap-2 d-flex flex-column">
+                        <form method="post" action="{% url 'add_to_cart' plant.id %}" class="d-flex gap-2">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="1" min="1" max="{{ plant.stock }}"
+                                class="form-control" style="width: 70px; border-radius: 10px;">
+                            <button type="submit" class="btn btn-premium btn-premium-primary w-100"
+                                style="padding: 10px; font-size: 0.9rem;">
+                                <i class="fas fa-cart-plus"></i> Add
+                            </button>
+                        </form>
+                        <form method="post" action="{% url 'buy_now_single' plant.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn btn-premium btn-premium-outline w-100"
+                                style="padding: 10px; font-size: 0.9rem; color: var(--primary) !important; border-color: var(--primary);">
+                                <i class="fas fa-bolt"></i> Buy Now
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
         {% endif %}
         {% empty %}
-        <div class="col-12 text-center">
-            <i class="fas fa-seedling fa-5x text-muted mb-3"></i>
-            <h4>No plants available yet</h4>
-            <p class="text-muted">Check back later for more plants.</p>
+        <div class="col-12 text-center py-5">
+            <div class="hero-glass-card d-inline-block px-5">
+                <i class="fas fa-seedling fa-5x text-success mb-4 opacity-50"></i>
+                <h3 class="text-white">No plants available in this section</h3>
+                <p class="text-light opacity-75">Our growers are working on fresh stock. Check back soon!</p>
+            </div>
         </div>
         {% endfor %}
     </div>

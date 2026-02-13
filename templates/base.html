@@ -37,66 +37,167 @@
 
 </head>
 
+
 <body>
+    <!-- Preloader -->
+    <div id="preloader" class="preloader"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 99999; display: flex; align-items: center; justify-content: center;">
+        <div
+            style="width: 50px; height: 50px; border: 3px solid #f3f3f3; border-top: 3px solid var(--primary, #059669); border-radius: 50%; animation: spin 1s linear infinite;">
+        </div>
+    </div>
+    <style>
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
     <!-- Start Main Top -->
+    <!-- Premium Navigation Infrastructure -->
     <header class="main-header">
-        <!-- Start Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-default bootsnav">
+        <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
-                <!-- Start Header Navigation -->
-                <div class="navbar-header">
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu"
-                        aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                    <a class="navbar-brand" href="/index"><img src="{% static 'images/padlogo2.PNG' %}"
-                            style="width: 80px;" class="logo" alt=""></a>
-                </div>
-                <!-- End Header Navigation -->
+                <!-- Brand Node -->
+                <a class="navbar-brand d-flex align-items-center" href="/index">
+                    <img src="{% static 'images/padlogo2.PNG' %}" style="width: 60px; height: auto;" alt="Logo"
+                        class="mr-2">
+                    <span class="d-none d-sm-inline" style="font-size: 1.25rem; letter-spacing: -0.5px;">Paddy<span
+                            class="text-primary">Intelligence</span></span>
+                </a>
 
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="navbar-menu">
-                    <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
+                <!-- Mobile Trigger -->
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-toggle="collapse"
+                    data-target="#premium-nav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                        {% if request.session.details %}
+                <!-- Navigation Registry -->
+                <div class="collapse navbar-collapse order-lg-2" id="premium-nav">
+                    <ul class="navbar-nav ml-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-premium {% if request.path == '/index' %}active{% endif %}"
+                                href="/index">
+                                <i class="fas fa-home-alt mr-1 d-lg-none"></i> Home
+                            </a>
+                        </li>
 
-                        <li class="nav-item active"><a class="nav-link" href="/index">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/v_register"> View User</a></li>
-                        <li class="nav-item"><a class="nav-link text-danger" href="/logout">Logout</a></li>
+                        {% if request.session.uid or request.session.details %}
+                        <!-- Intelligence Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link nav-link-premium dropdown-toggle" href="#" id="intelMenu" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                AI Intelligence
+                            </a>
+                            <ul class="dropdown-menu dropdown-premium" aria-labelledby="intelMenu">
+                                <li><a class="dropdown-item" href="/files"><i class="fas fa-leaf mr-1 text-primary"></i>
+                                        Paddy Analysis</a></li>
+                                <li><a class="dropdown-item" href="/files2"><i
+                                            class="fas fa-tree mr-1 text-primary"></i> Mango Analysis</a></li>
+                            </ul>
+                        </li>
 
-                        {% elif request.session.uid %}
+                        <!-- Operational Shortcuts -->
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-premium" href="/shop/catalog/">Procurement</a>
+                        </li>
 
-                        <li class="nav-item active"><a class="nav-link" href="/index">Home</a></li>
                         {% if request.session.is_superuser %}
-                        <li class="nav-item"><a class="nav-link text-warning" href="/shop/admin/dashboard/"><i
-                                    class="fas fa-crown"></i> Admin</a></li>
-                        {% endif %}
-                        <li class="nav-item"><a class="nav-link" href="/files"> Paddy Leaf Disease</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/files2">Mango Leaf Disease</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/shop/catalog/">Buy Plants</a></li>
-                        {% if not request.session.is_superuser %}
-                        <li class="nav-item"><a class="nav-link text-success" href="/shop/dashboard/"><i
-                                    class="fas fa-store"></i> My Shop</a></li>
-                        {% endif %}
-                        <li class="nav-item"><a class="nav-link" href="/shop/cart/"><i class="fas fa-shopping-cart"></i>
-                                Cart</a></li>
-                        <li class="nav-item"><a class="nav-link text-danger" href="/logout">Logout</a></li>
-
-
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-premium text-primary font-weight-bold"
+                                href="/shop/admin/dashboard/">
+                                <i class="fas fa-grid-horizontal mr-1"></i> Executive Portal
+                            </a>
+                        </li>
+                        {% elif request.session.details %}
+                        <li class="nav-item"><a class="nav-link nav-link-premium" href="/v_register">Operator
+                                Directory</a></li>
                         {% else %}
-
-                        <li class="nav-item active"><a class="nav-link" href="/index">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-premium" href="/shop/dashboard/">
+                                <i class="fas fa-store mr-1 text-primary"></i> Merchant Center
+                            </a>
+                        </li>
                         {% endif %}
 
+                        <li class="nav-item d-none d-lg-block">
+                            <a class="nav-link nav-link-premium position-relative" href="/shop/cart/">
+                                <i class="fas fa-shopping-cart"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item d-lg-none">
+                            <a class="nav-link nav-link-premium" href="/shop/cart/"><i
+                                    class="fas fa-shopping-cart mr-1"></i> Cart</a>
+                        </li>
+                        {% endif %}
                     </ul>
+                </div>
+
+                <!-- Persistent Right Actions -->
+                <div class="d-flex align-items-center order-lg-3 ml-2 ml-lg-3">
+                    {% if request.session.uid or request.session.details %}
+                    <div class="dropdown">
+                        <a class="account-node dropdown-toggle text-decoration-none" href="#" id="accountMenu"
+                            role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="user-avatar-nav">
+                                {% if current_user.profile_pic %}
+                                <img src="{{ current_user.profile_pic.url }}" class="rounded-circle w-100 h-100"
+                                    alt="Avatar">
+                                {% else %}
+                                <i class="fas fa-user-shield"></i>
+                                {% endif %}
+                            </div>
+                            {% firstof current_user.name "Operator" as display_name %}
+                            <div class="d-none d-md-flex flex-column">
+                                <span class="small font-weight-bold text-dark lh-1">{{ display_name }}</span>
+                                <span class="text-muted" style="font-size: 10px; font-weight: 500;">Active
+                                    Session</span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right dropdown-premium" aria-labelledby="accountMenu">
+                            <li><a class="dropdown-item" href="/account"><i class="fas fa-id-card text-primary"></i>
+                                    Profile Identity</a></li>
+                            {% if not request.session.is_superuser %}
+                            <li><a class="dropdown-item" href="/shop/dashboard/"><i class="fas fa-cog text-primary"></i>
+                                    Merchant Settings</a></li>
+                            {% endif %}
+                            <li>
+                                <hr class="dropdown-divider opacity-50">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="/logout"><i class="fas fa-power-off"></i>
+                                    Terminate Session</a></li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <a href="/login" class="btn btn-premium btn-premium-primary py-2 px-3 px-lg-4 shadow-sm"
+                        style="font-size: 14px;">
+                        <i class="fas fa-sign-in-alt mr-1"></i> <span class="d-none d-sm-inline">Access System</span>
+                        <span class="d-inline d-sm-none">Login</span>
+                    </a>
+                    {% endif %}
                 </div>
             </div>
         </nav>
-        <!-- End Navigation -->
     </header>
     <!-- End Main Top -->
+
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
 
     {% block content %}
     {% endblock %}
@@ -111,13 +212,14 @@
     <script src="{% static 'js/jquery.superslides.min.js' %}"></script>
     <script src="{% static 'js/bootstrap-select.js' %}"></script>
     <script src="{% static 'js/inewsticker.js' %}"></script>
-    <script src="{% static 'js/bootsnav.js.' %}"></script>
     <script src="{% static 'js/images-loded.min.js' %}"></script>
     <script src="{% static 'js/isotope.min.js' %}"></script>
     <script src="{% static 'js/owl.carousel.min.js' %}"></script>
     <script src="{% static 'js/baguetteBox.min.js' %}"></script>
     <script src="{% static 'js/form-validator.min.js' %}"></script>
     <script src="{% static 'js/contact-form-script.js' %}"></script>
+    <script src="{% static 'js/bootsnav.js' %}"></script>
+    <script src="{% static 'js/jquery.nicescroll.min.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
 
     {% block extra_js %}{% endblock %}

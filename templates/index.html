@@ -14,19 +14,19 @@
                         Mango.
                         Upload a leaf photo and let our AI provide instant health reports and organic remedies.</p>
 
-                    <div class="d-flex flex-wrap gap-3">
+                    <div class="d-flex flex-wrap">
                         {% if request.session.uid %}
                         <a href="{% url 'paddy_upload' %}" class="btn btn-premium btn-premium-primary">
                             <i class="fas fa-microscope"></i> Paddy Analysis
                         </a>
-                        <a href="{% url 'mango_upload' %}" class="btn btn-premium btn-premium-outline ms-lg-3">
+                        <a href="{% url 'mango_upload' %}" class="btn btn-premium btn-premium-outline ml-lg-3">
                             <i class="fas fa-leaf"></i> Mango Analysis
                         </a>
                         {% else %}
                         <a href="/login" class="btn btn-premium btn-premium-primary">
                             <i class="fas fa-sign-in-alt"></i> Login to Analyze
                         </a>
-                        <a href="/register" class="btn btn-premium btn-premium-outline ms-lg-3">
+                        <a href="/register" class="btn btn-premium btn-premium-outline ml-lg-3">
                             <i class="fas fa-user-plus"></i> Join as Farmer
                         </a>
                         {% endif %}
@@ -136,11 +136,11 @@
                 <p class="text-muted mb-4">We empower farmers with accessible digital tools to combat crop diseases,
                     reduce pesticide use, and maximize yield quality.</p>
                 <ul class="list-unstyled">
-                    <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle text-success me-3"></i>
+                    <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle text-success mr-3"></i>
                         Real-time cloud-based analysis</li>
-                    <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle text-success me-3"></i>
+                    <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle text-success mr-3"></i>
                         Expert-curated treatment database</li>
-                    <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle text-success me-3"></i>
+                    <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle text-success mr-3"></i>
                         Support for multiple crop variants</li>
                 </ul>
                 <a href="/shop/catalog/" class="btn btn-premium btn-premium-primary mt-3"

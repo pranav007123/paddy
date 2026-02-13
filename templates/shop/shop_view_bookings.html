@@ -1,76 +1,143 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Shop Orders - Plant Health System{% endblock %}
+{% block title %}Order Bookings - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row mt-5">
+<div class="container py-5">
+    <div class="row mb-5">
         <div class="col-12">
-            <h2 class="text-success"><i class="fas fa-shopping-cart me-2"></i>Orders</h2>
-            <hr class="mb-4">
-            
-            {% if bookings %}
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>User</th>
-                            <th>Date</th>
-                            <th>Items</th>
-                            <th>Total Amount</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for booking in bookings %}
-                        <tr>
-                            <td>#{{ booking.id }}</td>
-                            <td>{{ booking.user.username }}</td>
-                            <td>{{ booking.created_at|date:"M d, Y" }}</td>
-                            <td>
-                                {% for item in booking.items.all %}
-                                    {{ item.plant.name }}{% if not forloop.last %}, {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>₹{{ booking.total_amount }}</td>
-                            <td>
-                                {% if booking.order_status == 'pending' %}
-                                    <span class="badge bg-warning">Pending</span>
-                                {% elif booking.order_status == 'confirmed' %}
-                                    <span class="badge bg-success">Confirmed</span>
-                                {% elif booking.order_status == 'shipped' %}
-                                    <span class="badge bg-primary">Shipped</span>
-                                {% elif booking.order_status == 'delivered' %}
-                                    <span class="badge bg-info">Delivered</span>
-                                {% elif booking.order_status == 'cancelled' %}
-                                    <span class="badge bg-danger">Cancelled</span>
-                                {% else %}
-                                    <span class="badge bg-secondary">{{ booking.order_status|title }}</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if booking.order_status == 'pending' %}
-                                    <a href="{% url 'update_order_status' booking.id 'confirmed' %}" class="btn btn-sm btn-success">Confirm</a>
-                                    <a href="{% url 'update_order_status' booking.id 'cancelled' %}" class="btn btn-sm btn-danger">Cancel</a>
-                                {% elif booking.order_status == 'confirmed' %}
-                                    <a href="{% url 'update_order_status' booking.id 'shipped' %}" class="btn btn-sm btn-primary">Ship</a>
-                                {% elif booking.order_status == 'shipped' %}
-                                    <a href="{% url 'update_order_status' booking.id 'delivered' %}" class="btn btn-sm btn-info">Deliver</a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <span class="section-tag">Order Management</span>
+            <h2 class="section-title mb-0"><i class="fas fa-shopping-cart me-2 text-primary"></i>Merchant Order Registry
+            </h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="feature-card p-0 overflow-hidden">
+                <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="font-weight-bold mb-0">Active Bookings ({{ bookings|length }})</h5>
+                    <div class="small text-muted">Customer orders and fulfillment tracking</div>
+                </div>
+                {% if bookings %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light small">
+                            <tr>
+                                <th class="ps-4">Reference</th>
+                                <th>Client Details</th>
+                                <th>Booking Date</th>
+                                <th>Ordered Products</th>
+                                <th>Revenue</th>
+                                <th>Current Status</th>
+                                <th class="pe-4 text-center">Management Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            {% for booking in bookings %}
+                            <tr>
+                                <td class="ps-4">
+                                    <span class="font-weight-bold">#{{ booking.id }}</span>
+                                </td>
+                                <td>
+                                    <div class="font-weight-bold mb-0">{{ booking.user.name|default:booking.user.email }}</div>
+                                    <span class="text-muted small">{{ booking.user.email }}</span>
+                                </td>
+                                <td>{{ booking.created_at|date:"M d, Y" }}</td>
+                                <td>
+                                    <div class="text-wrap" style="max-width: 250px;">
+                                        {% for item in booking.items.all %}
+                                        <span class="badge bg-light text-dark mb-1">{{ item.plant.name }} (x{{ item.quantity }})</span>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                <td class="text-end font-weight-bold text-primary">₹{{ booking.total_amount }}</td>
+                                <td>
+                                    {% if booking.order_status == 'pending' %}
+                                    <span class="badge rounded-pill px-3 py-2 bg-warning text-dark"
+                                        style="font-size: 0.7rem; font-weight: 600;">Pending</span>
+                                    {% elif booking.order_status == 'confirmed' %}
+                                    <span class="badge rounded-pill px-3 py-2 bg-info text-white"
+                                        style="font-size: 0.7rem; font-weight: 600;">Confirmed</span>
+                                    {% elif booking.order_status == 'shipped' %}
+                                    <span class="badge rounded-pill px-3 py-2 bg-primary text-white"
+                                        style="font-size: 0.7rem; font-weight: 600;">Shipped</span>
+                                    {% elif booking.order_status == 'delivered' %}
+                                    <span class="badge rounded-pill px-3 py-2 bg-emerald text-white"
+                                        style="font-size: 0.7rem; font-weight: 600;">Delivered</span>
+                                    {% elif booking.order_status == 'cancelled' %}
+                                    <span class="badge rounded-pill px-3 py-2 bg-danger text-white"
+                                        style="font-size: 0.7rem; font-weight: 600;">Cancelled</span>
+                                    {% else %}
+                                    <span class="badge rounded-pill px-3 py-2 bg-secondary text-white" style="font-size: 0.7rem; font-weight: 600;">{{ booking.order_status|title }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="pe-4 text-center">
+                                    {% if booking.order_status == 'pending' %}
+                                    <a href="{% url 'update_order_status' booking.id 'confirmed' %}"
+                                        class="btn btn-sm btn-premium btn-premium-primary text-white py-1 px-3 me-1"
+                                        style="font-size: 0.75rem;">Confirm</a>
+                                    <a href="{% url 'update_order_status' booking.id 'cancelled' %}"
+                                        class="btn btn-sm btn-outline-danger py-1 px-3"
+                                        style="font-size: 0.75rem;">Cancel</a>
+                                    {% elif booking.order_status == 'confirmed' %}
+                                    <a href="{% url 'update_order_status' booking.id 'shipped' %}"
+                                        class="btn btn-sm btn-premium btn-premium-primary text-white py-1 px-3"
+                                        style="font-size: 0.75rem;">Mark Shipped</a>
+                                    {% elif booking.order_status == 'shipped' %}
+                                    <a href="{% url 'update_order_status' booking.id 'delivered' %}"
+                                        class="btn btn-sm btn-premium btn-premium-primary text-white py-1 px-3"
+                                        style="font-size: 0.75rem;">Mark Delivered</a>
+                                    {% else %}
+                                    <span class="badge bg-light text-muted border py-1 px-3"><i
+                                            class="fas fa-check me-1"></i>Completed</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="p-5 text-center text-muted">
+                    <i class="fas fa-shopping-bag fa-3x mb-3 opacity-25"></i>
+                    <p class="mb-0">No customer orders currently registered in the system.</p>
+                </div>
+                {% endif %}
             </div>
-            {% else %}
-            <div class="alert alert-info text-center">
-                <i class="fas fa-info-circle me-2"></i>No orders available.
-            </div>
-            {% endif %}
         </div>
     </div>
 </div>
+
+<style>
+    .bg-emerald {
+        background-color: var(--primary) !important;
+    }
+
+    .section-tag {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--primary), #34d399);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--dark);
+    }
+
+    .feature-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+</style>
 {% endblock %}

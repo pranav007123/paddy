@@ -1,77 +1,103 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Category Management - Admin Panel{% endblock %}
+{% block title %}Taxonomy Management - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <!-- Sidebar -->
-        {% include 'shop/includes/admin_sidebar.html' %}
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-12">
+            <span class="section-tag">System Metadata</span>
+            <h2 class="section-title mb-0"><i class="fas fa-tags me-2 text-primary"></i>Global Product Categories</h2>
+        </div>
+    </div>
 
-        <!-- Main Content -->
-        <div class="col-md-9">
-            <h2><i class="fas fa-tags me-2"></i>Category Management</h2>
-            <hr>
-
-            <!-- Add Category Form -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5><i class="fas fa-plus-circle me-2"></i>Add New Category</h5>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="name" class="form-label">Category Name</label>
-                                <input type="text" class="form-control" id="name" name="name" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="description" class="form-label">Description</label>
-                                <input type="text" class="form-control" id="description" name="description">
-                            </div>
+    <!-- Add Category Form -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="feature-card p-4">
+                <h5 class="font-weight-bold mb-4"><i class="fas fa-plus-circle text-primary me-2"></i>Define New
+                    Taxonomy Member</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-5 mb-4 mb-md-0">
+                            <label for="name"
+                                class="form-label small font-weight-bold text-muted text-uppercase">Taxonomy
+                                Name</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                placeholder="e.g., Medicinal Plants" required
+                                style="border-radius: 12px; padding: 12px;">
                         </div>
-                        <button type="submit" class="btn btn-success">Add Category</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Categories List -->
-            <div class="card">
-                <div class="card-header">
-                    <h5><i class="fas fa-list me-2"></i>Existing Categories</h5>
-                </div>
-                <div class="card-body">
-                    {% if categories %}
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Created</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for category in categories %}
-                                <tr>
-                                    <td>{{ category.id }}</td>
-                                    <td>{{ category.name }}</td>
-                                    <td>{{ category.description|default:"-" }}</td>
-                                    <td>{{ category.created_at|date:"M d, Y" }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                        <div class="col-md-5 mb-4 mb-md-0">
+                            <label for="description"
+                                class="form-label small font-weight-bold text-muted text-uppercase">Functional
+                                Description</label>
+                            <input type="text" class="form-control" id="description" name="description"
+                                placeholder="Brief overview of this category..."
+                                style="border-radius: 12px; padding: 12px;">
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-premium btn-premium-primary w-100 py-3">
+                                <i class="fas fa-save me-2"></i>Create
+                            </button>
+                        </div>
                     </div>
-                    {% else %}
-                    <p class="text-muted">No categories available yet.</p>
-                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories List -->
+    <div class="row">
+        <div class="col-12">
+            <div class="feature-card p-0 overflow-hidden">
+                <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="font-weight-bold mb-0">Active Species Classification ({{ categories|length }})</h5>
+                    <div class="small text-muted">Core system metadata</div>
                 </div>
+                {% if categories %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light small">
+                            <tr>
+                                <th class="ps-4">Identifier</th>
+                                <th>Category Title</th>
+                                <th>Classification Description</th>
+                                <th class="pe-4 text-end">Onboarded Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            {% for category in categories %}
+                            <tr>
+                                <td class="ps-4">
+                                    <span class="badge bg-light text-primary border px-3 py-1" style="border-radius: 6px;">#{{ category.id }}</span>
+                                </td>
+                                <td>
+                                    <div class="font-weight-bold h6 mb-0">{{ category.name }}</div>
+                                </td>
+                                <td>{{ category.description|default:"No description provided." }}</td>
+                                <td class="pe-4 text-end text-muted">{{ category.created_at|date:"M d, Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="p-5 text-center text-muted">
+                    <i class="fas fa-tags fa-3x mb-3 opacity-25"></i>
+                    <p class="mb-0">Zero categories defined in the central taxonomy.</p>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.1);
+    }
+</style>
 {% endblock %}

@@ -1,185 +1,201 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Shop Dashboard - Plant Health System{% endblock %}
+{% block title %}Shop Dashboard - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-12 d-flex justify-content-between align-items-end">
+            <div>
+                <span class="section-tag">Merchant Console</span>
+                <h2 class="section-title mb-0"><i class="fas fa-store me-2 text-primary"></i>{{ shop.shop_name }}
+                    Dashboard</h2>
+            </div>
+            <div class="text-end">
+                <span class="badge rounded-pill px-3 py-2 
+                    {% if shop.status == 'approved' %}bg-emerald text-white
+                    {% elif shop.status == 'pending' %}bg-warning text-dark
+                    {% else %}bg-danger text-white{% endif %}">
+                    Status: {{ shop.status|title }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="row mb-5">
+        <div class="col-md-3 mb-4">
+            <div class="feature-card text-center py-4">
+                <div class="stat-icon bg-light-emerald text-primary mb-3 mx-auto">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <h3 class="font-weight-bold mb-1">{{ plants.count }}</h3>
+                <p class="text-muted small text-uppercase mb-0">Active Plants</p>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="feature-card text-center py-4">
+                <div class="stat-icon bg-light-primary text-primary mb-3 mx-auto"
+                    style="background: rgba(30, 41, 59, 0.05);">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h3 class="font-weight-bold mb-1">{{ bookings.count }}</h3>
+                <p class="text-muted small text-uppercase mb-0">Total Orders</p>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="feature-card text-center py-4">
+                <div class="stat-icon bg-light-warning text-warning mb-3 mx-auto"
+                    style="background: rgba(245, 158, 11, 0.05);">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3 class="font-weight-bold mb-1">{{ reviews|length|default:"0" }}</h3>
+                <p class="text-muted small text-uppercase mb-0">Customer Reviews</p>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="feature-card text-center py-4">
+                <div class="stat-icon bg-light-info text-info mb-3 mx-auto"
+                    style="background: rgba(6, 182, 212, 0.05);">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <h3 class="font-weight-bold mb-1">Active</h3>
+                <p class="text-muted small text-uppercase mb-0">Account Health</p>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-3 bg-light sidebar">
-            <div class="p-3">
-                <h4><i class="fas fa-store me-2"></i>{{ shop.shop_name }}</h4>
-                <hr>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'shop_dashboard' %}"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'shop_profile' %}"><i class="fas fa-user me-2"></i>Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'manage_shop_categories' %}"><i class="fas fa-tags me-2"></i>Manage Categories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'plant_management' %}"><i class="fas fa-seedling me-2"></i>Plant Management</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'view_bookings' %}"><i class="fas fa-calendar me-2"></i>Bookings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'view_reviews' %}"><i class="fas fa-star me-2"></i>Reviews</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'change_password_shop' %}"><i class="fas fa-key me-2"></i>Change Password</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
-                    </li>
-                </ul>
+        <!-- Quick Actions -->
+        <div class="col-lg-12 mb-5">
+            <div class="feature-card p-4">
+                <h5 class="font-weight-bold mb-4">Quick Management</h5>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{% url 'plant_management' %}" class="btn btn-premium btn-premium-primary">
+                        <i class="fas fa-plus me-2"></i> Add New Plant
+                    </a>
+                    <a href="{% url 'view_bookings' %}" class="btn btn-premium btn-premium-outline"
+                        style="color: var(--primary) !important; border-color: var(--primary);">
+                        <i class="fas fa-calendar-check me-2"></i> View Bookings
+                    </a>
+                    <a href="{% url 'manage_shop_categories' %}" class="btn btn-premium btn-premium-outline"
+                        style="color: var(--primary) !important; border-color: var(--primary);">
+                        <i class="fas fa-tags me-2"></i> Categories
+                    </a>
+                    <a href="{% url 'shop_profile' %}" class="btn btn-premium btn-premium-outline"
+                        style="color: var(--primary) !important; border-color: var(--primary);">
+                        <i class="fas fa-cog me-2"></i> Store Settings
+                    </a>
+                </div>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="col-md-9">
-            <h2><i class="fas fa-tachometer-alt me-2"></i>Shop Dashboard</h2>
-            <hr>
-
-            <!-- Stats Cards -->
-            <div class="row mb-4">
-                <div class="col-md-3 mb-3">
-                    <div class="card shop-card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-seedling fa-2x text-success mb-2"></i>
-                            <h5>{{ plants.count }}</h5>
-                            <p class="text-muted">Total Plants</p>
-                        </div>
-                    </div>
+        <!-- Recent Tables -->
+        <div class="col-lg-6 mb-4">
+            <div class="feature-card p-0 overflow-hidden">
+                <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="font-weight-bold mb-0">Recent Plants</h5>
+                    <a href="{% url 'plant_management' %}" class="text-primary small font-weight-bold">View All</a>
                 </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card shop-card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-calendar fa-2x text-primary mb-2"></i>
-                            <h5>{{ bookings.count }}</h5>
-                            <p class="text-muted">Bookings</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card shop-card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-star fa-2x text-warning mb-2"></i>
-                            <h5>
-                                {% if reviews %}
-                                    {{ reviews|length }}
-                                {% else %}
-                                    0
-                                {% endif %}
-                            </h5>
-                            <p class="text-muted">Reviews</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card shop-card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-store fa-2x text-info mb-2"></i>
-                            <h5>{{ shop.status|title }}</h5>
-                            <p class="text-muted">Status</p>
-                        </div>
-                    </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light small">
+                            <tr>
+                                <th class="ps-4">Name</th>
+                                <th>Stock</th>
+                                <th class="pe-4 text-end">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            {% for plant in plants|slice:":5" %}
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        {% if plant.image %}
+                                        <img src="{{ plant.image.url }}" width="40" height="40"
+                                            class="rounded-circle me-2" style="object-fit: cover;">
+                                        {% endif %}
+                                        <span>{{ plant.name }}</span>
+                                    </div>
+                                </td>
+                                <td>{{ plant.stock }}</td>
+                                <td class="pe-4 text-end font-weight-bold text-primary">₹{{ plant.price }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="p-4 text-center text-muted">No plants registered yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
 
-            <!-- Recent Plants -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5><i class="fas fa-seedling me-2"></i>Recent Plants</h5>
+        <div class="col-lg-6 mb-4">
+            <div class="feature-card p-0 overflow-hidden">
+                <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="font-weight-bold mb-0">Recent Orders</h5>
+                    <a href="{% url 'view_bookings' %}" class="text-primary small font-weight-bold">View All</a>
                 </div>
-                <div class="card-body">
-                    {% if plants %}
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Plant Name</th>
-                                        <th>Category</th>
-                                        <th>Price</th>
-                                        <th>Stock</th>
-                                        <th>Created</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for plant in plants|slice:":5" %}
-                                    <tr>
-                                        <td>{{ plant.name }}</td>
-                                        <td>{{ plant.category.name }}</td>
-                                        <td>₹{{ plant.price }}</td>
-                                        <td>{{ plant.stock }}</td>
-                                        <td>{{ plant.created_at|date:"M d, Y" }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-muted">No plants added yet. <a href="{% url 'plant_management' %}">Add your first plant</a></p>
-                    {% endif %}
-                </div>
-            </div>
-
-            <!-- Recent Orders -->
-            <div class="card">
-                <div class="card-header">
-                    <h5><i class="fas fa-shopping-cart me-2"></i>Recent Orders</h5>
-                </div>
-                <div class="card-body">
-                    {% if bookings %}
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Order ID</th>
-                                        <th>User</th>
-                                        <th>Date</th>
-                                        <th>Items</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for booking in bookings|slice:":5" %}
-                                    <tr>
-                                        <td>#{{ booking.id }}</td>
-                                        <td>{{ booking.user.username }}</td>
-                                        <td>{{ booking.created_at|date:"M d, Y" }}</td>
-                                        <td>
-                                            {% for item in booking.items.all %}
-                                                {{ item.plant.name }}{% if not forloop.last %}, {% endif %}
-                                            {% endfor %}
-                                        </td>
-                                        <td>₹{{ booking.total_amount }}</td>
-                                        <td>
-                                            <span class="badge 
-                                                {% if booking.order_status == 'confirmed' %}bg-success
-                                                {% elif booking.order_status == 'pending' %}bg-warning
-                                                {% elif booking.order_status == 'shipped' %}bg-primary
-                                                {% elif booking.order_status == 'delivered' %}bg-info
-                                                {% elif booking.order_status == 'cancelled' %}bg-danger
-                                                {% else %}bg-secondary{% endif %}">
-                                                {{ booking.order_status|title }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-muted">No orders yet.</p>
-                    {% endif %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light small">
+                            <tr>
+                                <th class="ps-4">Order ID</th>
+                                <th>Status</th>
+                                <th class="pe-4 text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            {% for booking in bookings|slice:":5" %}
+                            <tr>
+                                <td class="ps-4">#{{ booking.id }}</td>
+                                <td>
+                                    <span class="badge rounded-pill 
+                                        {% if booking.order_status == 'paid' or booking.order_status == 'delivered' %}bg-success
+                                        {% elif booking.order_status == 'pending' %}bg-warning
+                                        {% else %}bg-primary{% endif %}">
+                                        {{ booking.order_status|title }}
+                                    </span>
+                                </td>
+                                <td class="pe-4 text-end font-weight-bold text-primary">₹{{ booking.total_amount }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="p-4 text-center text-muted">No sales yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .bg-light-emerald {
+        background: rgba(5, 150, 105, 0.05);
+    }
+
+    .bg-emerald {
+        background-color: var(--primary) !important;
+    }
+
+    .gap-3 {
+        gap: 1rem;
+    }
+</style>
 {% endblock %}

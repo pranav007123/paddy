@@ -1,41 +1,46 @@
-{% block content %}
+{% extends 'base.html' %}
 {% load static %}
-{% include 'header.html' %}
 
-<div class="contact-box-main">
+{% block content %}
+<div class="contact-box-main py-5">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-sm-12">
-                <div class="contact-form-right">
-                    <h2> View Registered Officers </h2>
-                    <div class="row">
-                    <table class="table table-bordered">
-                         <tr>
-                            <th>ID</th>
-                            <th>OFFICER NAME</th>
-                            <th>PHONE NUMBER</th>
-                            <th>PLACE</th>
-                            <th>BOOKING</th>
-                            
-                            
-                         </tr>
-                        {% for i in result %}
-                           <tr>
-                              <td>{{forloop.counter}}</td>
-                              <td>{{i.officer_name}}</td>
-                              <td>{{i.phone_number}}</td>
-                              <td>{{i.place}}</td>
-                              <td><a href="booking/{{i.id}}">booking</a></td>
-                            </tr>
-                           
-                        {% endfor %}
-                    </table>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="feature-card shadow-lg p-4">
+                    <span class="section-tag">Agricultural Experts</span>
+                    <h2 class="mb-4">Registered Officers</h2>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>OFFICER NAME</th>
+                                    <th>PHONE NUMBER</th>
+                                    <th>PLACE</th>
+                                    <th>ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in result %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td class="font-weight-bold">{{i.officer_name}}</td>
+                                    <td>{{i.phone_number}}</td>
+                                    <td><span class="badge badge-soft-success">{{i.place}}</span></td>
+                                    <td>
+                                        <a href="/booking/{{i.id}}"
+                                            class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                            <i class="fas fa-calendar-check mr-1"></i> Book Slot
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
-                    
                 </div>
-            </div>              
+            </div>
+        </div>
     </div>
 </div>
-<!-- End Cart -->
-{% include 'footer.html' %}
 {% endblock %}

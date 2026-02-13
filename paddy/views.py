@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.contrib import messages
 # FILE UPLOAD AND VIEW
 from  django.core.files.storage import FileSystemStorage
 # SESSION
@@ -30,11 +31,13 @@ def addreg(request):
         confirm_password=request.POST.get('confirm_password')
 
         if user.objects.filter(email=email).exists():
-             return render(request,'register.html',{'message':"Email already registered"})
+             messages.error(request, "Email already registered")
+             return redirect('/register')
 
         sav=user(name=name,phone_number=phone_number,email=email,password=password,confirm_password=confirm_password)
         sav.save()
-    return render(request,'index.html',{'message':"Successfully Registered"})
+        messages.success(request, "Successfully Registered")
+    return redirect('/login')
 
 def v_register(request):
     users=user.objects.all()
@@ -204,6 +207,48 @@ def addfile_mango(request):
 
 def result(request):
     return render(request,'result.html')
+
+def account(request):
+    if 'uid' not in request.session:
+        messages.error(request, "Please login to access your account")
+        return redirect('/login')
+    
+    userid = request.session['uid']
+    user_obj = user.objects.get(id=userid)
+
+    if request.method == "POST":
+        action = request.POST.get('action')
+        
+        if action == "update_details":
+            user_obj.name = request.POST.get('name')
+            user_obj.email = request.POST.get('email')
+            user_obj.phone_number = request.POST.get('phone_number')
+            
+            if 'profile_pic' in request.FILES:
+                user_obj.profile_pic = request.FILES['profile_pic']
+            
+            user_obj.save()
+            request.session['uname'] = user_obj.name
+            messages.success(request, "Profile details updated successfully")
+            
+        elif action == "change_password":
+            current_password = request.POST.get('current_password')
+            new_password = request.POST.get('new_password')
+            confirm_password = request.POST.get('confirm_password')
+            
+            if user_obj.password != current_password:
+                messages.error(request, "Incorrect current password")
+            elif new_password != confirm_password:
+                messages.error(request, "Passwords do not match")
+            else:
+                user_obj.password = new_password
+                user_obj.confirm_password = new_password
+                user_obj.save()
+                messages.success(request, "Password changed successfully")
+        
+        return redirect('/account')
+
+    return render(request, 'account.html', {'user': user_obj})
 
 # def resulted(request):
 #     if request.method=="POST":

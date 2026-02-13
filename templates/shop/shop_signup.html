@@ -1,61 +1,108 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Shop Registration - Plant Health System{% endblock %}
+{% block title %}Vendor Onboarding - Agricultural Intelligence{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container py-5">
     <div class="row justify-content-center mt-5">
-        <div class="col-lg-8 col-xl-6">
-            <div class="card shadow-lg border-0">
-                <div class="card-header bg-success text-white text-center py-4">
-                    <h3 class="mb-0"><i class="fas fa-store me-2"></i>Shop Registration</h3>
-                    <p class="mb-0 opacity-75">Create your shop account to start selling</p>
+        <div class="col-lg-8">
+            <div class="feature-card p-4 p-md-5">
+                <div class="text-center mb-5">
+                    <span class="section-tag">Merchant Registration</span>
+                    <h2 class="section-title mb-2">Initialize Your Vendor Profile</h2>
+                    <p class="text-muted small text-uppercase font-weight-bold">Scale your agricultural commerce</p>
                 </div>
-                <div class="card-body p-4">
-                    <form method="post">
-                        {% csrf_token %}
 
-                        <!-- Shop Information Section -->
-                        <h5 class="mb-3 text-success">Shop Information</h5>
-                        <div class="mb-3">
-                            <label for="shop_name" class="form-label fw-semibold">Shop Name</label>
-                            <input type="text" name="shop_name" id="shop_name" class="form-control" required>
+                <form method="post">
+                    {% csrf_token %}
+
+                    <!-- Shop Information Section -->
+                    <h5 class="font-weight-bold mb-4 d-flex align-items-center">
+                        <span
+                            class="bg-light-primary text-primary rounded-circle d-flex align-items-center justify-content-center me-2"
+                            style="width: 32px; height: 32px; font-size: 0.9rem;">1</span>
+                        Commerce Entity Details
+                    </h5>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label for="shop_name"
+                                class="form-label small text-muted text-uppercase font-weight-bold">Legal Trading
+                                Name</label>
+                            <input type="text" name="shop_name" id="shop_name" class="form-control"
+                                placeholder="e.g. Green Valley Seeds" required>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="email" class="form-label fw-semibold">Business Email</label>
-                            <input type="email" name="email" id="email" class="form-control" required>
+                        <div class="col-md-6">
+                            <label for="email"
+                                class="form-label small text-muted text-uppercase font-weight-bold">Business
+                                Communication Endpoint</label>
+                            <input type="email" name="email" id="email" class="form-control"
+                                placeholder="business@example.com" required>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="contact_number" class="form-label fw-semibold">Contact Number</label>
-                            <input type="text" name="contact_number" id="contact_number" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="address" class="form-label fw-semibold">Address</label>
-                            <textarea name="address" id="address" class="form-control" rows="3"></textarea>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="description" class="form-label fw-semibold">Shop Description</label>
-                            <textarea name="description" id="description" class="form-control" rows="3"></textarea>
-                        </div>
-
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-success btn-lg py-3">
-                                <i class="fas fa-store me-2"></i>Register Shop
-                            </button>
-                        </div>
-                    </form>
-
-                    <div class="text-center mt-4">
-                        <p class="mb-0">Already have an account? <a href="{% url 'login' %}"
-                                class="text-success text-decoration-none fw-semibold">Login</a></p>
                     </div>
+
+                    <div class="mb-4">
+                        <label for="contact_number"
+                            class="form-label small text-muted text-uppercase font-weight-bold">Primary
+                            Telecommunications Ref</label>
+                        <input type="text" name="contact_number" id="contact_number" class="form-control"
+                            placeholder="+91 XXXX XXX XXX">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="address"
+                            class="form-label small text-muted text-uppercase font-weight-bold">Physical
+                            Geolocation</label>
+                        <textarea name="address" id="address" class="form-control" rows="3"
+                            placeholder="Full street address..."></textarea>
+                    </div>
+
+                    <div class="mb-5">
+                        <label for="description"
+                            class="form-label small text-muted text-uppercase font-weight-bold">Enterprise Mission
+                            Statement</label>
+                        <textarea name="description" id="description" class="form-control" rows="4"
+                            placeholder="Brief overview of your product range and service philosophy..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-premium btn-premium-primary w-100 py-3 mb-4 shadow-sm">
+                        <i class="fas fa-store me-2"></i>Provision Merchant Account
+                    </button>
+                </form>
+
+                <div class="text-center pt-4 border-top">
+                    <p class="text-muted small mb-0">Existing Operator? <a href="{% url 'login' %}"
+                            class="text-primary font-weight-bold">Authenticate Here</a></p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    input,
+    textarea {
+        display: block;
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 1rem;
+        color: #1e293b;
+        background-color: #fff;
+        border: 2px solid #f1f5f9;
+        border-radius: 12px;
+        transition: all .2s ease-in-out;
+    }
+
+    input:focus,
+    textarea:focus {
+        border-color: var(--primary);
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.1);
+    }
+
+    .bg-light-primary {
+        background: rgba(5, 150, 105, 0.1);
+    }
+</style>
 {% endblock %}

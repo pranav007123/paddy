@@ -1,55 +1,51 @@
-{% block content %}
+{% extends 'base.html' %}
 {% load static %}
-{% include 'header.html' %}
+
+{% block content %}
 {% if message %}
- <script>
+<script>
     alert('{{message}}')
- </script>
+</script>
 {% endif %}
-<div class="contact-box-main">
+
+<div class="contact-box-main py-5">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-sm-12">
-                <div class="contact-form-right">
-                    <h2>OFFICER BOOKING</h2>
-                    <p></p>
-                    <form id="" method="POST" action="addbook/{{result.id}}" enctype="multipart/form-data">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="feature-card shadow-lg p-4">
+                    <span class="section-tag">Expert Consultation</span>
+                    <h2 class="mb-4">Schedule Appointment</h2>
+                    <p class="text-muted mb-4">Book a session with <strong>{{result.officer_name}}</strong> to discuss
+                        plant health strategies.</p>
+
+                    <form method="POST" action="/addbook/{{result.id}}" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <input type="text" readonly class="form-control" id="officer_name" name="officer_name" placeholder="Your Name" value="{{result.officer_name}}">
-                                    <input type="hidden" class="form-control" id="officer_id" name="officer_id" placeholder="Your Officer Id" value="{{result.id}}">
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <input type="date" placeholder="Date" id="date" class="form-control" name="date">
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <input type="time" placeholder="Time" id="time" class="form-control" name="time" >
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                            </div>                            
-                            <div class="col-md-12">
-                                <div class="submit-button text-center">
-                                    <button class="btn hvr-hover" id="submit" type="submit">SUBMIT</button>
-                                    <div id="msgSubmit" class="h3 text-center hidden"></div>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold small text-uppercase">Officer Identity</label>
+                            <input type="text" readonly class="form-control bg-light" value="{{result.officer_name}}">
+                            <input type="hidden" name="officer_id" value="{{result.id}}">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold small text-uppercase">Preferred Date</label>
+                            <input type="date" class="form-control" name="date" required>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="font-weight-bold small text-uppercase">Preferred Time</label>
+                            <input type="time" class="form-control" name="time" required>
+                        </div>
+
+                        <div class="text-center">
+                            <button class="btn btn-premium btn-premium-primary w-100 justify-content-center"
+                                type="submit">
+                                <i class="fas fa-calendar-check mr-2"></i> Confirm Booking
+                            </button>
                         </div>
                     </form>
                 </div>
             </div>
-            
         </div>
     </div>
 </div>
-<!-- End Cart -->
-{% include 'footer.html' %}
 {% endblock %}

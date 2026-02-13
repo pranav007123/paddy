@@ -1,129 +1,195 @@
-{% extends 'shop/shop_base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Home - Plant Health System{% endblock %}
+{% block title %}Agricultural Intelligence Platform - Home{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="bg-success text-white py-5">
-    <div class="container">
+<!-- Premium Hero Section -->
+<section class="hero-premium py-5 mb-5"
+    style="background: linear-gradient(135deg, var(--slate-900) 0%, #0f172a 100%); position: relative; overflow: hidden; min-height: 600px; display: flex; align-items: center;">
+    <div class="hero-bg-accent"
+        style="position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(5, 150, 105, 0.15) 0%, transparent 70%); border-radius: 50%;">
+    </div>
+    <div class="container position-relative" style="z-index: 2;">
         <div class="row align-items-center">
-            <div class="col-md-6">
-                <h1 class="display-4">Plant Health Management System</h1>
-                <p class="lead">Discover plants, connect with shops, and grow your garden with our comprehensive platform.</p>
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <span class="badge rounded-pill bg-emerald text-white px-3 py-2 mb-4 shadow-sm"
+                    style="font-weight: 600; letter-spacing: 1px;">NEXT-GEN AGRI-TECH</span>
+                <h1 class="display-3 font-weight-bold text-white mb-4" style="line-height: 1.1;">Botanical Health &
+                    <span class="text-emerald">Merchant Ecosystem</span></h1>
+                <p class="lead text-white-50 mb-5 pe-lg-5">A comprehensive operational platform for plant diagnostics,
+                    merchant coordination, and streamlined agricultural procurement.</p>
                 {% if not user.is_authenticated %}
-                    <a href="{% url 'signup' %}" class="btn btn-light btn-lg me-2">Get Started</a>
-                    <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">Login</a>
+                <div class="d-flex gap-3">
+                    <a href="{% url 'signup' %}" class="btn btn-premium btn-premium-primary px-5 py-3 shadow-lg">
+                        <i class="fas fa-rocket me-2"></i>Provision Account
+                    </a>
+                    <a href="{% url 'login' %}"
+                        class="btn btn-premium btn-premium-outline px-5 py-3 border-white text-white">
+                        <i class="fas fa-sign-in-alt me-2"></i>Operator Login
+                    </a>
+                </div>
+                {% else %}
+                <div class="d-flex gap-3">
+                    <a href="{% url 'user_dashboard' %}"
+                        class="btn btn-premium btn-premium-primary px-5 py-3 shadow-lg">
+                        <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                    </a>
+                </div>
                 {% endif %}
             </div>
-            <div class="col-md-6 text-center">
-                <i class="fas fa-leaf fa-10x text-white opacity-75"></i>
+            <div class="col-lg-6 text-center">
+                <div class="hero-visual-wrapper position-relative d-inline-block">
+                    <div class="bg-emerald rounded-circle position-absolute"
+                        style="width: 300px; height: 300px; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.1; filter: blur(50px);">
+                    </div>
+                    <i class="fas fa-leaf fa-12x text-emerald opacity-75 shadow-lg floating-animation"></i>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Featured Categories -->
-<section class="py-5">
+<!-- Taxonomic Groups -->
+<section class="py-5 mb-5">
     <div class="container">
-        <h2 class="text-center mb-4">Plant Categories</h2>
-        <div class="row">
+        <div class="text-center mb-5">
+            <span class="section-tag">Registry Overview</span>
+            <h2 class="section-title">Operational Categories</h2>
+        </div>
+        <div class="row g-4">
             {% for category in categories %}
-                <div class="col-md-3 mb-4">
-                    <div class="card h-100 text-center">
-                        <div class="card-body">
-                            <i class="fas fa-seedling fa-3x text-success mb-3"></i>
-                            <h5 class="card-title">{{ category.name }}</h5>
-                            <p class="card-text">{{ category.description|truncatewords:10 }}</p>
-                        </div>
+            <div class="col-md-3">
+                <div class="feature-card p-4 text-center h-100 transition-up">
+                    <div class="stat-icon mb-4 mx-auto"
+                        style="background: rgba(5, 150, 105, 0.1); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-seedling text-primary fa-xl"></i>
                     </div>
+                    <h5 class="font-weight-bold mb-2">{{ category.name }}</h5>
+                    <p class="text-muted small mb-0">{{ category.description|truncatewords:8 }}</p>
                 </div>
+            </div>
             {% empty %}
-                <div class="col-12 text-center">
-                    <p class="text-muted">No categories available yet.</p>
-                </div>
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No taxonomic nodes currently provisioned.</p>
+            </div>
             {% endfor %}
         </div>
     </div>
 </section>
 
-<!-- Featured Plants -->
-<section class="py-5 bg-light">
+<!-- Featured Assets -->
+<section class="py-5 bg-light border-top border-bottom">
     <div class="container">
-        <h2 class="text-center mb-4">Featured Plants</h2>
-        <div class="row">
+        <div class="d-flex justify-content-between align-items-end mb-5">
+            <div>
+                <span class="section-tag">Curated Selection</span>
+                <h2 class="section-title mb-0">Premium Catalog Assets</h2>
+            </div>
+            <a href="{% url 'view_categories_plants' %}" class="btn btn-premium btn-premium-outline btn-sm">Explorer
+                Registry</a>
+        </div>
+        <div class="row g-4">
             {% for plant in featured_plants %}
-                <div class="col-md-3 mb-4">
-                    <div class="card plant-card h-100">
-                        <img src="{{ plant.image.url|default:'https://via.placeholder.com/300x200' }}" class="card-img-top" alt="{{ plant.name }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ plant.name }}</h5>
-                            <p class="card-text">{{ plant.description|truncatewords:15 }}</p>
-                            <p class="card-text"><strong>₹{{ plant.price }}</strong></p>
-                            <a href="{% url 'view_categories_plants' %}" class="btn btn-success">View Details</a>
+            <div class="col-md-3">
+                <div class="feature-card p-0 overflow-hidden h-100 transition-up">
+                    <img src="{{ plant.image.url|default:'https://via.placeholder.com/300x200' }}" class="w-100"
+                        alt="{{ plant.name }}" style="height: 200px; object-fit: cover;">
+                    <div class="p-4">
+                        <h5 class="font-weight-bold mb-1">{{ plant.name }}</h5>
+                        <p class="text-muted small mb-4">{{ plant.description|truncatewords:10 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="h5 font-weight-bold text-dark mb-0">₹{{ plant.price }}</span>
+                            <a href="{% url 'view_categories_plants' %}"
+                                class="btn btn-premium btn-premium-primary btn-sm px-3">View</a>
                         </div>
                     </div>
                 </div>
+            </div>
             {% empty %}
-                <div class="col-12 text-center">
-                    <p class="text-muted">No plants available yet.</p>
-                </div>
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No featured assets identified in current cycle.</p>
+            </div>
             {% endfor %}
         </div>
     </div>
 </section>
 
-<!-- Featured Shops -->
-<section class="py-5">
+<!-- Operational Roadmap -->
+<section class="py-5 mt-5">
     <div class="container">
-        <h2 class="text-center mb-4">Featured Shops</h2>
-        <div class="row">
-            {% for shop in featured_shops %}
-                <div class="col-md-3 mb-4">
-                    <div class="card h-100 shop-card">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ shop.shop_name }}</h5>
-                            <p class="card-text"><i class="fas fa-map-marker-alt text-success me-2"></i>{{ shop.address|truncatewords:5 }}</p>
-                            <p class="card-text">{{ shop.description|truncatewords:10 }}</p>
-                            <a href="{% url 'view_shops_user' %}" class="btn btn-outline-success">Visit Shop</a>
-                        </div>
+        <div class="text-center mb-5">
+            <span class="section-tag">System Workflow</span>
+            <h2 class="section-title">End-to-End Operation</h2>
+        </div>
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="feature-card p-5 h-100 transition-up">
+                    <div class="stat-icon mb-4 mx-auto"
+                        style="background: rgba(5, 150, 105, 0.1); width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-search text-primary fa-2x"></i>
                     </div>
+                    <h4 class="font-weight-bold mb-3">Discovery</h4>
+                    <p class="text-muted">Analyze high-fidelity botanical images and identify certified merchant
+                        availability.</p>
                 </div>
-            {% empty %}
-                <div class="col-12 text-center">
-                    <p class="text-muted">No shops available yet.</p>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card p-5 h-100 transition-up">
+                    <div class="stat-icon mb-4 mx-auto"
+                        style="background: rgba(5, 150, 105, 0.1); width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-shopping-cart text-primary fa-2x"></i>
+                    </div>
+                    <h4 class="font-weight-bold mb-3">Acquisition</h4>
+                    <p class="text-muted">Securely provision assets through our integrated procurement and transaction
+                        layer.</p>
                 </div>
-            {% endfor %}
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card p-5 h-100 transition-up">
+                    <div class="stat-icon mb-4 mx-auto"
+                        style="background: rgba(5, 150, 105, 0.1); width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-chart-line text-primary fa-2x"></i>
+                    </div>
+                    <h4 class="font-weight-bold mb-3">Optimization</h4>
+                    <p class="text-muted">Monitor growth metrics and maintain health standards using our expert
+                        resolution protocols.</p>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- How It Works -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-4">How It Works</h2>
-        <div class="row text-center">
-            <div class="col-md-4 mb-4">
-                <div class="p-4">
-                    <i class="fas fa-search fa-3x text-success mb-3"></i>
-                    <h4>Browse Plants</h4>
-                    <p>Discover a wide variety of plants from different shops in our platform.</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="p-4">
-                    <i class="fas fa-shopping-cart fa-3x text-success mb-3"></i>
-                    <h4>Add to Cart</h4>
-                    <p>Add your favorite plants to cart and proceed to checkout.</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="p-4">
-                    <i class="fas fa-leaf fa-3x text-success mb-3"></i>
-                    <h4>Grow & Care</h4>
-                    <p>Receive your plants and follow care instructions to grow healthy plants.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<style>
+    .floating-animation {
+        animation: floating 3s ease-in-out infinite;
+    }
+
+    @keyframes floating {
+        0% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-20px);
+        }
+
+        100% {
+            transform: translateY(0px);
+        }
+    }
+
+    .transition-up {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .transition-up:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .hero-premium {
+        border-bottom: 4px solid var(--primary);
+    }
+</style>
 {% endblock %}

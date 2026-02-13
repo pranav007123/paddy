@@ -1,2 +1,55 @@
-
 /** ADD YOUR AWESOME CODES HERE **/
+
+/* User Profile Nav */
+.user-pic-nav {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #28a745;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.main-header .navbar-nav .dropdown-menu {
+    border-radius: 8px !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    padding: 10px 0 !important;
+    margin-top: 5px !important;
+    background: #fff !important;
+    min-width: 200px !important;
+}
+
+.main-header .navbar-nav .dropdown-menu li a {
+    padding: 10px 20px !important;
+    display: block !important;
+    color: #333 !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+}
+
+.main-header .navbar-nav .dropdown-menu li a:hover {
+    background: #f8f9fa !important;
+    color: #28a745 !important;
+    padding-left: 25px !important;
+}
+
+.main-header .navbar-nav .dropdown-menu .divider {
+    height: 1px;
+    background: #eee;
+    margin: 5px 0;
+}
+
+/* Ensure dropdown works with bootsnav or standard bootstrap */
+.main-header .navbar-nav .dropdown:hover>.dropdown-menu {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+}
+
+.main-header .navbar-nav .dropdown-menu {
+    transition: all 0.3s ease;
+    transform: translateY(10px);
+}

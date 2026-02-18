@@ -220,31 +220,101 @@ def account(request):
         action = request.POST.get('action')
         
         if action == "update_details":
-            user_obj.name = request.POST.get('name')
-            user_obj.email = request.POST.get('email')
-            user_obj.phone_number = request.POST.get('phone_number')
+            import re
             
+            # Get form data
+            name = request.POST.get('name', '').strip()
+            email = request.POST.get('email', '').strip()
+            phone_number = request.POST.get('phone_number', '').strip()
+            
+            # Validate name (2-100 characters, letters and spaces only)
+            if not name or len(name) < 2:
+                messages.error(request, "Name must be at least 2 characters long")
+                return redirect('/account')
+            if len(name) > 100:
+                messages.error(request, "Name must not exceed 100 characters")
+                return redirect('/account')
+            if not re.match(r'^[a-zA-Z\s]+$', name):
+                messages.error(request, "Name can only contain letters and spaces")
+                return redirect('/account')
+            
+            # Validate email format
+            email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+            if not re.match(email_pattern, email):
+                messages.error(request, "Please enter a valid email address")
+                return redirect('/account')
+            
+            # Check email uniqueness (excluding current user)
+            if user.objects.filter(email=email).exclude(id=userid).exists():
+                messages.error(request, "This email is already registered to another account")
+                return redirect('/account')
+            
+            # Validate phone number (exactly 10 digits)
+            if not re.match(r'^\d{10}$', phone_number):
+                messages.error(request, "Phone number must be exactly 10 digits")
+                return redirect('/account')
+            
+            # Validate profile picture if uploaded
             if 'profile_pic' in request.FILES:
-                user_obj.profile_pic = request.FILES['profile_pic']
+                profile_pic = request.FILES['profile_pic']
+                
+                # Check file type
+                allowed_types = ['image/jpeg', 'image/jpg', 'image/png']
+                if profile_pic.content_type not in allowed_types:
+                    messages.error(request, "Profile picture must be a JPG, JPEG, or PNG image")
+                    return redirect('/account')
+                
+                # Check file size (max 5MB)
+                if profile_pic.size > 5 * 1024 * 1024:
+                    messages.error(request, "Profile picture must be less than 5MB")
+                    return redirect('/account')
+                
+                user_obj.profile_pic = profile_pic
             
+            # All validations passed, update user
+            user_obj.name = name
+            user_obj.email = email
+            user_obj.phone_number = phone_number
             user_obj.save()
             request.session['uname'] = user_obj.name
             messages.success(request, "Profile details updated successfully")
             
         elif action == "change_password":
+            import re
+            
             current_password = request.POST.get('current_password')
             new_password = request.POST.get('new_password')
             confirm_password = request.POST.get('confirm_password')
             
+            # Validate current password
             if user_obj.password != current_password:
                 messages.error(request, "Incorrect current password")
-            elif new_password != confirm_password:
-                messages.error(request, "Passwords do not match")
-            else:
-                user_obj.password = new_password
-                user_obj.confirm_password = new_password
-                user_obj.save()
-                messages.success(request, "Password changed successfully")
+                return redirect('/account')
+            
+            # Validate password match
+            if new_password != confirm_password:
+                messages.error(request, "New passwords do not match")
+                return redirect('/account')
+            
+            # Validate password strength (min 8 chars, at least 1 uppercase, 1 lowercase, 1 number)
+            if len(new_password) < 8:
+                messages.error(request, "Password must be at least 8 characters long")
+                return redirect('/account')
+            if not re.search(r'[A-Z]', new_password):
+                messages.error(request, "Password must contain at least one uppercase letter")
+                return redirect('/account')
+            if not re.search(r'[a-z]', new_password):
+                messages.error(request, "Password must contain at least one lowercase letter")
+                return redirect('/account')
+            if not re.search(r'\d', new_password):
+                messages.error(request, "Password must contain at least one number")
+                return redirect('/account')
+            
+            # All validations passed, update password
+            user_obj.password = new_password
+            user_obj.confirm_password = new_password
+            user_obj.save()
+            messages.success(request, "Password changed successfully")
         
         return redirect('/account')
 

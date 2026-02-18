@@ -402,13 +402,16 @@ def add_to_cart(request, plant_id):
         messages.error(request, "You cannot purchase your own product.")
         return redirect('view_categories_plants')
 
+    # Get quantity from form, default to 1
+    quantity = int(request.POST.get('quantity', 1))
+
     cart_item, created = Cart.objects.get_or_create(
         user=current_user,
         plant=plant,
-        defaults={'quantity': 1}
+        defaults={'quantity': quantity}
     )
     if not created:
-        cart_item.quantity += 1
+        cart_item.quantity += quantity
         cart_item.save()
         
     messages.success(request, 'Added to cart')
@@ -510,6 +513,7 @@ from django.db.models import F
 @login_required_custom
 def view_cart(request):
     current_user = get_current_user(request)
+    
     # Annotate item_total for robust initial display
     cart_items = Cart.objects.filter(user=current_user).annotate(
         item_total=F('plant__price') * F('quantity')

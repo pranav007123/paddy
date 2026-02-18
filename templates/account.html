@@ -32,30 +32,41 @@
                     <h5 class="mb-0">Edit Profile Details</h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data">
+                    <form method="POST" enctype="multipart/form-data" id="profileForm">
                         {% csrf_token %}
                         <input type="hidden" name="action" value="update_details">
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label class="form-label">Full Name</label>
-                                <input type="text" class="form-control" name="name" value="{{ user.name }}" required>
+                                <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}"
+                                    required minlength="2" maxlength="100" pattern="[a-zA-Z\s]+"
+                                    title="Name can only contain letters and spaces">
+                                <div class="invalid-feedback" id="nameError"></div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Phone Number</label>
-                                <input type="text" class="form-control" name="phone_number"
-                                    value="{{ user.phone_number }}" required>
+                                <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="phone" name="phone_number"
+                                    value="{{ user.phone_number }}" required pattern="\d{10}"
+                                    title="Phone number must be exactly 10 digits" maxlength="10">
+                                <div class="invalid-feedback" id="phoneError"></div>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Email Address</label>
-                            <input type="email" class="form-control" name="email" value="{{ user.email }}" required>
+                            <label class="form-label">Email Address <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}"
+                                required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                                title="Please enter a valid email address">
+                            <div class="invalid-feedback" id="emailError"></div>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label">Update Profile Picture</label>
-                            <input type="file" class="form-control" name="profile_pic" accept="image/*">
+                            <input type="file" class="form-control" id="profilePic" name="profile_pic"
+                                accept="image/jpeg,image/jpg,image/png">
+                            <small class="text-muted">Accepted formats: JPG, JPEG, PNG. Max size: 5MB</small>
+                            <div class="invalid-feedback" id="fileError"></div>
                         </div>
 
                         <button type="submit" class="btn btn-success">Save Changes</button>
@@ -69,23 +80,37 @@
                     <h5 class="mb-0">Change Password</h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST">
+                    <form method="POST" id="passwordForm">
                         {% csrf_token %}
                         <input type="hidden" name="action" value="change_password">
 
                         <div class="mb-3">
-                            <label class="form-label">Current Password</label>
-                            <input type="password" class="form-control" name="current_password" required>
+                            <label class="form-label">Current Password <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control" id="currentPassword" name="current_password"
+                                required>
+                            <div class="invalid-feedback" id="currentPasswordError"></div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label class="form-label">New Password</label>
-                                <input type="password" class="form-control" name="new_password" required>
+                                <label class="form-label">New Password <span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" id="newPassword" name="new_password"
+                                    required minlength="8">
+                                <div class="invalid-feedback" id="newPasswordError"></div>
+                                <div class="mt-2">
+                                    <small class="text-muted">Password strength: </small>
+                                    <span id="passwordStrength" class="badge bg-secondary">Not set</span>
+                                </div>
+                                <small class="text-muted d-block mt-1">
+                                    Must be at least 8 characters with uppercase, lowercase, and number
+                                </small>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Confirm New Password</label>
-                                <input type="password" class="form-control" name="confirm_password" required>
+                                <label class="form-label">Confirm New Password <span
+                                        class="text-danger">*</span></label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirm_password"
+                                    required>
+                                <div class="invalid-feedback" id="confirmPasswordError"></div>
                             </div>
                         </div>
 
@@ -96,4 +121,214 @@
         </div>
     </div>
 </div>
+
+<style>
+    .form-control.is-invalid {
+        border-color: #dc3545;
+    }
+
+    .form-control.is-valid {
+        border-color: #28a745;
+    }
+
+    .invalid-feedback {
+        display: none;
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .form-control.is-invalid~.invalid-feedback {
+        display: block;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Profile Form Validation
+        const profileForm = document.getElementById('profileForm');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const profilePicInput = document.getElementById('profilePic');
+
+        // Real-time validation for name
+        nameInput.addEventListener('input', function () {
+            const namePattern = /^[a-zA-Z\s]+$/;
+            const nameError = document.getElementById('nameError');
+
+            if (this.value.length < 2) {
+                this.classList.add('is-invalid');
+                this.classList.remove('is-valid');
+                nameError.textContent = 'Name must be at least 2 characters long';
+            } else if (this.value.length > 100) {
+                this.classList.add('is-invalid');
+                this.classList.remove('is-valid');
+                nameError.textContent = 'Name must not exceed 100 characters';
+            } else if (!namePattern.test(this.value)) {
+                this.classList.add('is-invalid');
+                this.classList.remove('is-valid');
+                nameError.textContent = 'Name can only contain letters and spaces';
+            } else {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+                nameError.textContent = '';
+            }
+        });
+
+        // Real-time validation for email
+        emailInput.addEventListener('input', function () {
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const emailError = document.getElementById('emailError');
+
+            if (!emailPattern.test(this.value)) {
+                this.classList.add('is-invalid');
+                this.classList.remove('is-valid');
+                emailError.textContent = 'Please enter a valid email address';
+            } else {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+                emailError.textContent = '';
+            }
+        });
+
+        // Real-time validation for phone
+        phoneInput.addEventListener('input', function () {
+            // Only allow digits
+            this.value = this.value.replace(/\D/g, '');
+
+            const phonePattern = /^\d{10}$/;
+            const phoneError = document.getElementById('phoneError');
+
+            if (this.value.length > 0 && !phonePattern.test(this.value)) {
+                this.classList.add('is-invalid');
+                this.classList.remove('is-valid');
+                phoneError.textContent = 'Phone number must be exactly 10 digits';
+            } else if (phonePattern.test(this.value)) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+                phoneError.textContent = '';
+            } else {
+                this.classList.remove('is-invalid', 'is-valid');
+                phoneError.textContent = '';
+            }
+        });
+
+        // Validate profile picture
+        profilePicInput.addEventListener('change', function () {
+            const fileError = document.getElementById('fileError');
+
+            if (this.files.length > 0) {
+                const file = this.files[0];
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                const maxSize = 5 * 1024 * 1024; // 5MB
+
+                if (!allowedTypes.includes(file.type)) {
+                    this.classList.add('is-invalid');
+                    this.classList.remove('is-valid');
+                    fileError.textContent = 'Profile picture must be a JPG, JPEG, or PNG image';
+                    this.value = '';
+                } else if (file.size > maxSize) {
+                    this.classList.add('is-invalid');
+                    this.classList.remove('is-valid');
+                    fileError.textContent = 'Profile picture must be less than 5MB';
+                    this.value = '';
+                } else {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                    fileError.textContent = '';
+                }
+            }
+        });
+
+        // Password Form Validation
+        const passwordForm = document.getElementById('passwordForm');
+        const newPasswordInput = document.getElementById('newPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const passwordStrength = document.getElementById('passwordStrength');
+
+        // Password strength checker
+        newPasswordInput.addEventListener('input', function () {
+            const password = this.value;
+            const newPasswordError = document.getElementById('newPasswordError');
+            let strength = 0;
+            let errors = [];
+
+            if (password.length >= 8) strength++;
+            else errors.push('at least 8 characters');
+
+            if (/[A-Z]/.test(password)) strength++;
+            else errors.push('one uppercase letter');
+
+            if (/[a-z]/.test(password)) strength++;
+            else errors.push('one lowercase letter');
+
+            if (/\d/.test(password)) strength++;
+            else errors.push('one number');
+
+            // Update strength indicator
+            if (strength === 0) {
+                passwordStrength.textContent = 'Not set';
+                passwordStrength.className = 'badge bg-secondary';
+            } else if (strength <= 2) {
+                passwordStrength.textContent = 'Weak';
+                passwordStrength.className = 'badge bg-danger';
+            } else if (strength === 3) {
+                passwordStrength.textContent = 'Medium';
+                passwordStrength.className = 'badge bg-warning';
+            } else {
+                passwordStrength.textContent = 'Strong';
+                passwordStrength.className = 'badge bg-success';
+            }
+
+            // Validation
+            if (password.length > 0 && strength < 4) {
+                this.classList.add('is-invalid');
+                this.classList.remove('is-valid');
+                newPasswordError.textContent = 'Password must contain: ' + errors.join(', ');
+            } else if (password.length > 0) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+                newPasswordError.textContent = '';
+            }
+
+            // Check confirm password match
+            if (confirmPasswordInput.value) {
+                validatePasswordMatch();
+            }
+        });
+
+        // Confirm password validation
+        confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+
+        function validatePasswordMatch() {
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+            if (confirmPasswordInput.value !== newPasswordInput.value) {
+                confirmPasswordInput.classList.add('is-invalid');
+                confirmPasswordInput.classList.remove('is-valid');
+                confirmPasswordError.textContent = 'Passwords do not match';
+            } else if (confirmPasswordInput.value.length > 0) {
+                confirmPasswordInput.classList.remove('is-invalid');
+                confirmPasswordInput.classList.add('is-valid');
+                confirmPasswordError.textContent = '';
+            }
+        }
+
+        // Form submission validation
+        profileForm.addEventListener('submit', function (e) {
+            if (!this.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+
+        passwordForm.addEventListener('submit', function (e) {
+            if (!this.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+    });
+</script>
 {% endblock %}

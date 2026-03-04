@@ -64,6 +64,66 @@ def addlogin(request):
     else:
         return render(request,'login.html',{'message':"Invalid Email or Password"})
 
+def forgot_password(request):
+    return render(request, 'forgot_password.html')
+
+def verify_forgot_password(request):
+    if request.method == "POST":
+        email = request.POST.get('email', '').strip()
+        phone_number = request.POST.get('phone_number', '').strip()
+
+        # Check if user exists with this email and phone number
+        if user.objects.filter(email=email, phone_number=phone_number).exists():
+            request.session['reset_email'] = email
+            return redirect('/reset_password/')
+        else:
+            messages.error(request, "Invalid Email or Registered Phone Number combination.")
+            return redirect('/forgot_password/')
+    return redirect('/forgot_password/')
+
+def reset_password(request):
+    if 'reset_email' not in request.session:
+        messages.error(request, "Session expired or invalid request. Please verify your identity again.")
+        return redirect('/forgot_password/')
+    return render(request, 'reset_password.html')
+
+def update_password(request):
+    if request.method == "POST":
+        if 'reset_email' not in request.session:
+            messages.error(request, "Session expired. Please try again.")
+            return redirect('/forgot_password/')
+            
+        email = request.session['reset_email']
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if new_password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect('/reset_password/')
+        
+        # Basic constraints
+        if len(new_password) < 8:
+            messages.error(request, "Password must be at least 8 characters long.")
+            return redirect('/reset_password/')
+            
+        try:
+            user_obj = user.objects.get(email=email)
+            user_obj.password = new_password
+            user_obj.confirm_password = new_password # Update confirm_password field as well
+            user_obj.save()
+            
+            # Clear session variable securely
+            del request.session['reset_email']
+            
+            messages.success(request, "Security passphrase updated successfully. Please log in.")
+            return redirect('/login/')
+            
+        except user.DoesNotExist:
+            messages.error(request, "Error finding account. Please try again.")
+            return redirect('/forgot_password/')
+            
+    return redirect('/reset_password/')
+
 def logout(request):
     session_keys=list(request.session.keys())
     for key in session_keys:
